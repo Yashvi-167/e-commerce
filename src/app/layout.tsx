@@ -12,10 +12,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-import Navbar from "@/components/Navbar";
-import { CartProvider } from "@/components/CartProvider";
-import CartDrawer from "@/components/CartDrawer";
-import Footer from "@/components/Footer";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
@@ -34,13 +30,8 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <CartProvider>
-          <Navbar />
-          <div className="flex-1">{children}</div>
-          <Footer />
-          <CartDrawer />
-          <Toaster position="bottom-right" toastOptions={{ className: 'font-sans' }} />
-        </CartProvider>
+        {children}
+        <Toaster position="bottom-right" toastOptions={{ className: 'font-sans' }} />
       </body>
     </html>
   );

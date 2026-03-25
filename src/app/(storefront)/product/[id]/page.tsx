@@ -3,13 +3,24 @@ import AddToCartButton from "@/components/AddToCartButton";
 import { db } from "@/db";
 import { products } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { cache } from "react";
 
 export const dynamic = 'force-dynamic';
 
+// Cache the product fetch to prevent duplicate requests across generateMetadata and ProductPage
+const getProduct = cache(async (id: string) => {
+  try {
+    const productData = await db.select().from(products).where(eq(products.id, parseInt(id)));
+    return productData[0] || null;
+  } catch (error) {
+    console.error(`Error fetching product ${id}:`, error);
+    return null;
+  }
+});
+
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const { id } = await params;
-  const productData = await db.select().from(products).where(eq(products.id, parseInt(id)));
-  const product = productData[0];
+  const product = await getProduct(id);
   if (!product) return { title: "Product Not Found | AURALIS" };
   
   return {
@@ -21,12 +32,12 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 export default async function ProductPage({ params }: { params: { id: string } }) {
   const { id } = await params;
   
-  const productData = await db.select().from(products).where(eq(products.id, parseInt(id)));
-  const product = productData[0];
+  const product = await getProduct(id);
 
   if (!product) {
-    return <main className="min-h-screen bg-primary flex items-center justify-center font-black text-4xl text-foreground">Product Not Found in Database</main>;
+    return <main className="min-h-screen bg-primary flex items-center justify-center font-black text-4xl text-foreground text-center p-6 bg-slate-900 border border-slate-700/50 rounded-2xl max-w-2xl mx-auto mt-24">Product Not Found or Database Connection Failed</main>;
   }
+
 
   const features = product.features as string[] || [];
   const variants = product.variants as string[] || [];
@@ -67,9 +78,9 @@ export default async function ProductPage({ params }: { params: { id: string } }
             </div>
 
             <div className="flex items-end gap-4 text-xl pt-4">
-              <span className="text-accent font-black text-4xl">${Number(product.price).toFixed(2)}</span>
+              <span className="text-accent font-black text-4xl">₹{Number(product.price).toFixed(2)}</span>
               {product.compareAtPrice && (
-                <span className="text-slate-500 line-through font-bold text-2xl pb-1">${Number(product.compareAtPrice).toFixed(2)}</span>
+                <span className="text-slate-500 line-through font-bold text-2xl pb-1">₹{Number(product.compareAtPrice).toFixed(2)}</span>
               )}
             </div>
           </div>

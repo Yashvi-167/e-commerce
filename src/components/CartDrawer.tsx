@@ -45,7 +45,7 @@ export default function CartDrawer() {
                 <div className="flex-1 space-y-1">
                   <h4 className="font-bold text-foreground leading-tight">{item.name}</h4>
                   {item.variant && <p className="text-xs font-bold text-accent tracking-widest uppercase">{item.variant}</p>}
-                  <div className="text-slate-300 font-bold">${(item.price * item.quantity).toFixed(2)}</div>
+                  <div className="text-slate-300 font-bold">₹{(item.price * item.quantity).toFixed(2)}</div>
                   
                   {/* Quantity Adjuster */}
                   <div className="flex items-center gap-3 mt-2">
@@ -71,7 +71,7 @@ export default function CartDrawer() {
           <div className="p-6 border-t border-slate-700 bg-primary shadow-[0_-10px_40px_rgba(0,0,0,0.05)] space-y-4">
             <div className="flex justify-between items-end mb-4">
               <span className="text-slate-500 font-bold uppercase tracking-wider text-sm">Subtotal</span>
-              <span className="text-2xl font-black text-foreground">${cartTotal.toFixed(2)}</span>
+              <span className="text-2xl font-black text-foreground">₹{cartTotal.toFixed(2)}</span>
             </div>
             <p className="text-sm text-slate-400 text-center mb-2">Shipping and taxes calculated at checkout.</p>
             <button 

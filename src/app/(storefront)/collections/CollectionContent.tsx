@@ -77,7 +77,7 @@ export default function CollectionContent({ initialProducts }: { initialProducts
                 <h3 className="text-foreground font-bold text-xl tracking-tight">{product.name}</h3>
                 <p className="text-slate-400 text-sm font-medium">{product.department} &middot; {product.category}</p>
               </div>
-              <span className="text-accent font-black text-lg">${Number(product.price).toFixed(2)}</span>
+              <span className="text-accent font-black text-lg">₹{Number(product.price).toFixed(2)}</span>
             </div>
           </Link>
         ))}

@@ -130,7 +130,7 @@ export default function Home() {
                       <Star size={14} fill="currentColor" />
                       <Star size={14} fill="currentColor" />
                     </div>
-                    <span className="text-slate-400 font-medium">${item.price.toFixed(2)}</span>
+                    <span className="text-slate-400 font-medium">₹{item.price.toFixed(2)}</span>
                   </div>
                   <div className="pr-4"><ArrowRight className="text-slate-600 group-hover:text-accent" /></div>
                 </Link>

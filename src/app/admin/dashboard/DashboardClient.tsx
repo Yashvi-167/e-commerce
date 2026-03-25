@@ -167,7 +167,7 @@ export default function DashboardClient({ initialProducts }: { initialProducts: 
                       </div>
                     </td>
                     <td className="px-6 py-4 font-bold text-accent text-sm">
-                      ${Number(product.price).toFixed(2)}
+                      ₹{Number(product.price).toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button onClick={() => handleDelete(product.id)} className="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-colors">
