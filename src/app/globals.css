@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 60% Primary Color - Soft Pastel Sand/Cream */
+  --primary: #F4F1EA;
+  
+  /* 30% Secondary Color - Slightly deeper pastel stone */
+  --secondary: #E8E3D9;
+  
+  /* 10% Accent Color - Earthy Pastel Terracotta/Rose */
+  --accent: #E07A5F;
+  
+  --background: var(--primary);
+  /* Dark text for a light pastel theme */
+  --foreground: #2C363F; 
 }
 
 @theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Overriding the Dark Mode UI tokens to seamlessly match the Light Pastel Mode */
+  --color-slate-300: #889098; 
+  --color-slate-400: #717A83; 
+  --color-slate-500: #5C656F;
+  --color-slate-600: #495159;
+  
+  /* For borders that used to be dark - make them a soft pastel border */
+  --color-slate-700: #DCD6C9; 
+  
+  /* For UI boxes that used to be dark blocky backgrounds - make them soft pastel layers */
+  --color-slate-800: #E3DDD0; 
+  
+  /* Sync gray colors */
+  --color-gray-300: #889098;
+  --color-gray-400: #717A83;
+  --color-gray-600: #495159;
+  --color-gray-700: #DCD6C9;
+  --color-gray-800: #E3DDD0;
+  
+  /* Soft earth-tone gradient pair */
+  --color-green-400: #E2B276; 
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
