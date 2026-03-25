@@ -33,6 +33,28 @@ export default function LoginPage() {
     });
   };
 
+  const handleForgotPassword = () => {
+    if (!email) {
+      toast.error("Please enter your email address first to reset your password.");
+      return;
+    }
+    
+    const sendEmailReq = fetch('/api/auth/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    }).then(async (res) => {
+      if (!res.ok) throw new Error('Failed to send email');
+      return res.json();
+    });
+    
+    toast.promise(sendEmailReq, {
+      loading: 'Sending password reset link...',
+      success: `Password reset link sent securely to ${email}!`,
+      error: 'Error sending reset link',
+    });
+  };
+
   return (
     <main className="min-h-screen bg-primary flex flex-col md:flex-row font-sans">
       {/* 60% Aesthetic Billboard */}
@@ -95,7 +117,7 @@ export default function LoginPage() {
                   <input type="checkbox" className="w-4 h-4 rounded border-slate-700 bg-secondary text-accent focus:ring-accent focus:ring-offset-primary cursor-pointer" />
                   Remember me
                 </label>
-                <button type="button" className="text-accent hover:underline font-bold transition-all">Forgot Password?</button>
+                <button type="button" onClick={handleForgotPassword} className="text-accent hover:underline font-bold transition-all">Forgot Password?</button>
               </div>
             )}
             
