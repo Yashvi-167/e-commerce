@@ -44,7 +44,8 @@ export default function CartDrawer() {
                 <img src={item.image || "https://images.unsplash.com/photo-1556821840?auto=format&fit=crop&q=80"} alt={item.name} className="w-20 h-20 bg-slate-800 rounded-xl flex-shrink-0 object-cover" />
                 <div className="flex-1 space-y-1">
                   <h4 className="font-bold text-foreground leading-tight">{item.name}</h4>
-                  <div className="text-accent font-black">${(item.price * item.quantity).toFixed(2)}</div>
+                  {item.variant && <p className="text-xs font-bold text-accent tracking-widest uppercase">{item.variant}</p>}
+                  <div className="text-slate-300 font-bold">${(item.price * item.quantity).toFixed(2)}</div>
                   
                   {/* Quantity Adjuster */}
                   <div className="flex items-center gap-3 mt-2">

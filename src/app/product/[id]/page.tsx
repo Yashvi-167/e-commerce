@@ -93,20 +93,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
           )}
 
           <div className="space-y-6 pt-6 border-t border-slate-700/50">
-            {variants.length > 0 && (
-              <div className="flex items-center gap-6">
-                <span className="text-foreground font-bold uppercase tracking-wider text-sm">Select Variant</span>
-                <div className="flex flex-wrap gap-3">
-                  {variants.map(v => (
-                    <button key={v} className="px-5 h-12 rounded-xl border border-slate-700 flex items-center justify-center font-bold text-slate-400 hover:border-accent hover:text-accent hover:bg-slate-800 transition-colors shadow-sm">
-                      {v}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <AddToCartButton product={{ id: String(product.id), name: product.name, price: Number(product.price), image: product.imageUrl || "" }} />
+            <AddToCartButton variants={variants} product={{ id: String(product.id), name: product.name, price: Number(product.price), image: product.imageUrl || "" }} />
             
             <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-slate-500 mt-4">
               <span className={Number(product.inventory) > 10 ? "text-green-400 flex items-center gap-2" : "text-amber-500 flex items-center gap-2"}>

@@ -71,6 +71,7 @@ export default function CheckoutPage() {
                         <img src={product.image} className="w-20 h-20 rounded-xl bg-slate-800 object-cover shadow-inner" />
                         <div className="flex-1">
                           <h4 className="font-bold text-foreground text-lg">{product.name}</h4>
+                          {product.variant && <p className="text-xs font-black text-accent tracking-widest uppercase mt-1 px-2 py-0.5 bg-accent/10 border border-accent/20 rounded inline-block">{product.variant}</p>}
                           <p className="text-sm font-bold text-slate-500 mt-1">Qty: {product.quantity}</p>
                         </div>
                         <div className="font-black text-accent text-xl">
