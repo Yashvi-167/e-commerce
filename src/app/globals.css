@@ -1,55 +1,98 @@
 @import "tailwindcss";
 
-:root {
-  /* 60% Primary Color - Soft Pastel Sand/Cream */
-  --primary: #F4F1EA;
+@theme {
+  --color-background: hsl(240 10% 3.9%);
+  --color-foreground: hsl(0 0% 98%);
   
-  /* 30% Secondary Color - Slightly deeper pastel stone */
-  --secondary: #E8E3D9;
+  --color-card: hsl(240 10% 3.9% / 0.8);
+  --color-card-foreground: hsl(0 0% 98%);
   
-  /* 10% Accent Color - Earthy Pastel Terracotta/Rose */
-  --accent: #E07A5F;
+  --color-popover: hsl(240 10% 3.9% / 0.95);
+  --color-popover-foreground: hsl(0 0% 98%);
   
-  --background: var(--primary);
-  /* Dark text for a light pastel theme */
-  --foreground: #2C363F; 
+  --color-primary: hsl(263.4 70% 50.4%);
+  --color-primary-foreground: hsl(210 40% 98%);
+  
+  --color-secondary: hsl(217.2 91.2% 59.8%);
+  --color-secondary-foreground: hsl(222.2 47.4% 11.2%);
+  
+  --color-muted: hsl(240 3.7% 15.9%);
+  --color-muted-foreground: hsl(240 5% 64.9%);
+  
+  --color-accent: hsl(262.1 83.3% 57.8%);
+  --color-accent-foreground: hsl(210 40% 98%);
+  
+  --color-destructive: hsl(0 62.8% 30.6%);
+  --color-destructive-foreground: hsl(210 40% 98%);
+  
+  --color-border: hsl(240 3.7% 15.9%);
+  --color-input: hsl(240 3.7% 15.9%);
+  --color-ring: hsl(263.4 70% 50.4%);
+  
+  --radius-lg: 1rem;
+  --radius-md: calc(1rem - 2px);
+  --radius-sm: calc(1rem - 4px);
+  --radius-2xl: 1.5rem;
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
 }
 
-@theme inline {
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
-  --color-accent: var(--accent);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-
-  /* Overriding the Dark Mode UI tokens to seamlessly match the Light Pastel Mode */
-  --color-slate-300: #889098; 
-  --color-slate-400: #717A83; 
-  --color-slate-500: #5C656F;
-  --color-slate-600: #495159;
-  
-  /* For borders that used to be dark - make them a soft pastel border */
-  --color-slate-700: #DCD6C9; 
-  
-  /* For UI boxes that used to be dark blocky backgrounds - make them soft pastel layers */
-  --color-slate-800: #E3DDD0; 
-  
-  /* Sync gray colors */
-  --color-gray-300: #889098;
-  --color-gray-400: #717A83;
-  --color-gray-600: #495159;
-  --color-gray-700: #DCD6C9;
-  --color-gray-800: #E3DDD0;
-  
-  /* Soft earth-tone gradient pair */
-  --color-green-400: #E2B276; 
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(263, 70%, 50%, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(217, 91%, 60%, 0.15) 0px, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
+@layer utilities {
+  .glass {
+    background: hsla(240, 10%, 4%, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsla(0, 0%, 100%, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  }
+  
+  .glass-card {
+    @apply glass;
+    border-radius: var(--radius-2xl);
+    transition: all 0.3s ease;
+  }
+  
+  .glass-card:hover {
+    border-color: hsla(263, 70%, 50%, 0.4);
+    box-shadow: 0 0 20px hsla(263, 70%, 50%, 0.2);
+    transform: translateY(-5px);
+  }
+
+  .neon-text {
+    text-shadow: 0 0 10px hsla(263, 70%, 50%, 0.5), 0 0 20px hsla(263, 70%, 50%, 0.3);
+  }
+
+  .neon-border {
+    box-shadow: 0 0 15px hsla(263, 70%, 50%, 0.4);
+    border-color: hsla(263, 70%, 50%, 0.5);
+  }
 }

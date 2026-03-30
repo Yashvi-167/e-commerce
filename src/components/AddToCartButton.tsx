@@ -1,8 +1,9 @@
 "use client";
 import { useCart } from "./CartProvider";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function AddToCartButton({ 
   product, variants = [] 
@@ -15,7 +16,9 @@ export default function AddToCartButton({
 
   const handleAdd = () => {
     if (variants.length > 0 && !selectedVariant) {
-       toast.error("Please select a size/variant before adding to cart.");
+       toast.error("Please select a variant before initializing transfer.", {
+          className: "glass neon-border text-white border-primary/50",
+       });
        return;
     }
 
@@ -24,29 +27,31 @@ export default function AddToCartButton({
       quantity: 1, 
       image: product.image,
       variant: selectedVariant || undefined,
-      // Distinguish varied products by composing ID payload
       id: selectedVariant ? `${product.id}-${selectedVariant}` : product.id
     });
     
-    toast.success(`${product.name} ${selectedVariant ? `(${selectedVariant})` : ''} added to your cart!`, {
-      style: { background: 'var(--primary)', color: 'var(--foreground)', border: '1px solid var(--color-slate-700)' }
+    toast.success(`${product.name} synced to your vault!`, {
+      icon: <Sparkles className="text-primary" />,
+      className: "glass neon-border text-white border-primary/50",
     });
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {variants.length > 0 && (
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-          <span className="text-foreground font-bold uppercase tracking-wider text-sm whitespace-nowrap">Select Variant</span>
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase">
+            Select Configuration // Size
+          </div>
           <div className="flex flex-wrap gap-3">
             {variants.map(v => (
               <button 
                 key={v} 
                 onClick={() => setSelectedVariant(v)}
-                className={`px-5 h-12 rounded-xl border flex items-center justify-center font-bold transition-all shadow-sm ${
+                className={`px-6 h-14 rounded-2xl border flex items-center justify-center font-bold text-sm tracking-widest transition-all duration-300 ${
                   selectedVariant === v 
-                  ? "border-accent text-accent bg-accent/10 scale-105 shadow-[0_0_15px_rgba(204,255,0,0.2)]" 
-                  : "border-slate-700 text-slate-400 hover:border-accent hover:text-accent hover:bg-slate-800"
+                  ? "bg-primary text-white neon-border scale-105" 
+                  : "glass text-white/40 hover:text-white border-white/5"
                 }`}
               >
                 {v}
@@ -56,13 +61,15 @@ export default function AddToCartButton({
         </div>
       )}
       
-      <button 
+      <motion.button 
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={handleAdd}
-        className="w-full bg-accent text-primary h-16 rounded-full font-black text-xl flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(224,122,95,0.2)]"
+        className="w-full bg-primary text-white h-20 rounded-[2rem] font-black text-xl uppercase tracking-tighter flex items-center justify-center gap-4 neon-border shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:shadow-[0_0_50px_rgba(139,92,246,0.5)] transition-all"
       >
         <ShoppingBag size={24} />
-        Add To Cart
-      </button>
+        INITIALIZE TRANSFER
+      </motion.button>
     </div>
   );
 }

@@ -1,44 +1,60 @@
 import Link from "next/link";
+import { Sparkles, Ghost, Shield, Twitter, Instagram, Github } from "lucide-react";
+
 export default function Footer() {
   return (
-    <footer className="w-full bg-secondary py-16 px-6 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-        <div className="space-y-6">
-          <Link href="/" className="text-3xl font-black text-foreground tracking-widest hover:text-accent transition-colors">
-            AURALIS<span className="text-accent">.</span>
+    <footer className="w-full bg-background py-20 px-6 border-t border-white/5 relative overflow-hidden">
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-16 relative z-10">
+        <div className="space-y-8">
+          <Link href="/" className="text-3xl font-black text-white tracking-tighter hover:text-primary transition-all uppercase flex items-center gap-3">
+            <Ghost className="text-primary" size={28} />
+            ANTIGRAVITY
           </Link>
-          <p className="text-slate-400 text-base leading-relaxed max-w-sm">Your destination for premium quality products and uncompromising style.</p>
+          <p className="text-white/40 text-sm leading-relaxed max-w-sm font-medium uppercase tracking-widest">
+            Defying the standard through aesthetic precision and functional excellence.
+          </p>
+          <div className="flex gap-6 text-white/20">
+            <Twitter size={18} className="hover:text-primary cursor-pointer transition-colors" />
+            <Instagram size={18} className="hover:text-primary cursor-pointer transition-colors" />
+            <Github size={18} className="hover:text-primary cursor-pointer transition-colors" />
+          </div>
         </div>
+
         <div>
-          <h4 className="font-black text-foreground mb-6 uppercase tracking-wider text-sm">Shop</h4>
-          <ul className="space-y-4 text-base font-medium text-slate-400">
-            <li><Link href="/collections" className="hover:text-accent transition-colors">New Arrivals</Link></li>
-            <li><Link href="/collections" className="hover:text-accent transition-colors">Best Sellers</Link></li>
-            <li><Link href="/collections" className="hover:text-accent transition-colors">All Products</Link></li>
+          <h4 className="font-black text-white mb-8 uppercase tracking-[0.3em] text-[10px]">Registry // Shop</h4>
+          <ul className="space-y-4 text-xs font-bold text-white/40 uppercase tracking-widest">
+            <li><Link href="/collections" className="hover:text-primary transition-colors">Sector: New</Link></li>
+            <li><Link href="/collections" className="hover:text-primary transition-colors">Best Sellers</Link></li>
+            <li><Link href="/collections" className="hover:text-primary transition-colors">All Assets</Link></li>
           </ul>
         </div>
+
         <div>
-          <h4 className="font-black text-foreground mb-6 uppercase tracking-wider text-sm">Support</h4>
-          <ul className="space-y-4 text-base font-medium text-slate-400">
-            <li><Link href="/faq" className="hover:text-accent transition-colors">FAQ</Link></li>
-            <li><Link href="/shipping-returns" className="hover:text-accent transition-colors">Shipping & Returns</Link></li>
-            <li><Link href="/contact" className="hover:text-accent transition-colors">Contact Us</Link></li>
+          <h4 className="font-black text-white mb-8 uppercase tracking-[0.3em] text-[10px]">Nodes // Support</h4>
+          <ul className="space-y-4 text-xs font-bold text-white/40 uppercase tracking-widest">
+            <li><Link href="/faq" className="hover:text-primary transition-colors">Query Grid</Link></li>
+            <li><Link href="/shipping-returns" className="hover:text-primary transition-colors">Logistics</Link></li>
+            <li><Link href="/contact" className="hover:text-primary transition-colors">Comms Sync</Link></li>
           </ul>
         </div>
+
         <div>
-          <h4 className="font-black text-foreground mb-6 uppercase tracking-wider text-sm">Legal</h4>
-          <ul className="space-y-4 text-base font-medium text-slate-400">
-            <li><Link href="#" className="hover:text-accent transition-colors">Privacy Policy</Link></li>
-            <li><Link href="#" className="hover:text-accent transition-colors">Terms of Service</Link></li>
+          <h4 className="font-black text-white mb-8 uppercase tracking-[0.3em] text-[10px]">Secure // Legal</h4>
+          <ul className="space-y-4 text-xs font-bold text-white/40 uppercase tracking-widest">
+            <li><Link href="#" className="hover:text-primary transition-colors">Privacy Protocol</Link></li>
+            <li><Link href="#" className="hover:text-primary transition-colors">Terms of Sync</Link></li>
           </ul>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-800 text-center text-slate-500 font-medium text-sm flex flex-col md:flex-row justify-between items-center gap-4">
-        <p>&copy; 2025 AURALIS. All Rights Reserved.</p>
+
+      <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold uppercase tracking-[0.4em] text-white/20">
+        <p>&copy; 2077 ANTIGRAVITY. SYNCED IN SECTOR 7.</p>
         <div className="flex gap-4">
-          <span className="w-10 h-6 bg-slate-800 rounded flex items-center justify-center text-[10px] text-slate-400">VISA</span>
-          <span className="w-10 h-6 bg-slate-800 rounded flex items-center justify-center text-[10px] text-slate-400">MC</span>
-          <span className="w-10 h-6 bg-slate-800 rounded flex items-center justify-center text-[10px] text-slate-400">AMEX</span>
+          <div className="glass px-3 py-1 rounded border border-white/5">VISA</div>
+          <div className="glass px-3 py-1 rounded border border-white/5">MC</div>
+          <div className="glass px-3 py-1 rounded border border-white/5">CRYPTO</div>
         </div>
       </div>
     </footer>

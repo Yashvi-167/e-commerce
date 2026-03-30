@@ -6,10 +6,12 @@ import Footer from "@/components/Footer";
 export default function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (
     <CartProvider>
-      <Navbar />
-      <div className="flex-1">{children}</div>
-      <Footer />
-      <CartDrawer />
+      <div className="min-h-screen flex flex-col bg-background selection:bg-primary selection:text-white">
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
+        <CartDrawer />
+      </div>
     </CartProvider>
   );
 }

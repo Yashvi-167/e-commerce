@@ -36,8 +36,8 @@ export async function POST(req: Request) {
     const resetLink = `http://localhost:3000/reset-password?token=${token}`;
 
     // 4. Send email securely via Resend API
-    await resend.emails.send({
-      from: "onboarding@resend.dev", // default works for testing in dev environments
+    const { data, error: resendError } = await resend.emails.send({
+      from: "AURALIS <no-reply@auralis.com>", // UPDATE THIS to your verified domain email
       to: email,
       subject: "Reset Your AURALIS Password",
       html: `
@@ -51,6 +51,13 @@ export async function POST(req: Request) {
         </div>
       `,
     });
+
+    if (resendError) {
+      console.error("Resend API Error:", resendError);
+      return NextResponse.json({ error: "Failed to dispatch email securely" }, { status: 500 });
+    }
+
+    console.log("Resend Dispatch Success:", data);
 
     return NextResponse.json({ message: "If an account exists, a secure email has been sent." });
 

@@ -1,88 +1,135 @@
 "use client";
 import { useState } from "react";
 import { useCart } from "./CartProvider";
-import { X, Trash2, Plus, Minus } from "lucide-react";
+import { X, Trash2, Plus, Minus, ShoppingBag, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CartDrawer() {
   const { isCartOpen, setIsCartOpen, items, removeFromCart, updateQuantity, cartTotal } = useCart();
   const router = useRouter();
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const handleCheckout = () => {
-    setIsCartOpen(false); // smoothly close the navigational drawer
-    router.push('/checkout'); // fire direct navigation to bill page
+    setIsCartOpen(false);
+    router.push('/checkout');
   };
 
-  if (!isCartOpen) return null;
-
   return (
-    <>
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 transition-opacity" onClick={() => setIsCartOpen(false)} />
-      <div className="fixed top-0 right-0 h-full w-full max-w-md bg-secondary border-l border-slate-700 shadow-2xl z-50 flex flex-col animate-in slide-in-from-right duration-300">
-        
-        <div className="p-6 border-b border-slate-700 flex items-center justify-between">
-          <h2 className="text-2xl font-black text-foreground uppercase tracking-tighter">Your Cart</h2>
-          <button onClick={() => setIsCartOpen(false)} className="text-slate-400 hover:text-accent transition-colors">
-            <X size={24} />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {items.length === 0 ? (
-            <div className="text-slate-400 flex flex-col items-center justify-center h-full gap-4">
-              <span className="text-5xl opacity-50">🛍️</span>
-              <p className="font-medium">Your cart is empty.</p>
-              <button onClick={() => setIsCartOpen(false)} className="mt-4 px-6 py-2 border border-slate-400 rounded-full font-bold hover:bg-slate-800 hover:text-foreground hover:border-transparent transition-all">
-                Continue Shopping
+    <AnimatePresence>
+      {isCartOpen && (
+        <>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsCartOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]" 
+          />
+          <motion.div 
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed top-4 right-4 bottom-4 w-full max-w-md glass z-[101] rounded-[2.5rem] flex flex-col overflow-hidden border-white/10 shadow-2xl"
+          >
+            {/* Header */}
+            <div className="p-8 border-b border-white/5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <ShoppingBag className="text-primary" size={24} />
+                <h2 className="text-2xl font-black uppercase tracking-tighter">Your Vault</h2>
+              </div>
+              <button 
+                onClick={() => setIsCartOpen(false)} 
+                className="p-2 glass rounded-full text-white/40 hover:text-white transition-colors"
+              >
+                <X size={20} />
               </button>
             </div>
-          ) : (
-            items.map(item => (
-              <div key={item.id} className="flex gap-4 items-center bg-primary p-4 rounded-2xl border border-slate-700 shadow-sm relative group">
-                <img src={item.image || "https://images.unsplash.com/photo-1556821840?auto=format&fit=crop&q=80"} alt={item.name} className="w-20 h-20 bg-slate-800 rounded-xl flex-shrink-0 object-cover" />
-                <div className="flex-1 space-y-1">
-                  <h4 className="font-bold text-foreground leading-tight">{item.name}</h4>
-                  {item.variant && <p className="text-xs font-bold text-accent tracking-widest uppercase">{item.variant}</p>}
-                  <div className="text-slate-300 font-bold">₹{(item.price * item.quantity).toFixed(2)}</div>
-                  
-                  {/* Quantity Adjuster */}
-                  <div className="flex items-center gap-3 mt-2">
-                    <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-7 h-7 bg-slate-800 rounded-full flex items-center justify-center text-slate-500 hover:text-foreground transition-colors">
-                      <Minus size={14} />
+
+            {/* Items List */}
+            <div className="flex-1 overflow-y-auto p-8 space-y-6 scrollbar-hide">
+              {items.length === 0 ? (
+                <div className="h-full flex flex-col items-center justify-center gap-6 text-center">
+                  <Sparkles size={48} className="text-white/10" />
+                  <div className="space-y-2">
+                    <p className="font-bold tracking-widest uppercase text-white/40">Vault is empty</p>
+                    <p className="text-xs text-white/20 uppercase tracking-[0.2em]">No signals detected</p>
+                  </div>
+                  <button 
+                    onClick={() => setIsCartOpen(false)} 
+                    className="glass px-8 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest hover:neon-border transition-all"
+                  >
+                    RETURN TO GRID
+                  </button>
+                </div>
+              ) : (
+                items.map(item => (
+                  <motion.div 
+                    layout
+                    key={item.id} 
+                    className="glass p-6 rounded-3xl border-white/5 relative group hover:border-primary/30 transition-all"
+                  >
+                    <div className="flex gap-6 items-center">
+                      <div className="w-24 h-24 rounded-2xl overflow-hidden border border-white/5 bg-black/40">
+                        <img src={item.image} alt={item.name} className="w-full h-full object-cover opacity-80" />
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <h4 className="font-bold text-white uppercase tracking-tight text-lg">{item.name}</h4>
+                        {item.variant && <p className="text-[10px] font-bold text-primary tracking-[0.2em] uppercase">{item.variant}</p>}
+                        <div className="text-white font-black italic">${(item.price * item.quantity).toFixed(2)}</div>
+                        
+                        {/* Quantity Adjuster */}
+                        <div className="flex items-center gap-4 mt-4">
+                          <button 
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)} 
+                            className="w-8 h-8 glass rounded-full flex items-center justify-center text-white/40 hover:text-white transition-colors"
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="font-black text-white text-sm">{item.quantity}</span>
+                          <button 
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)} 
+                            className="w-8 h-8 glass rounded-full flex items-center justify-center text-white/40 hover:text-white transition-colors"
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <button 
+                      onClick={() => removeFromCart(item.id)} 
+                      className="absolute top-6 right-6 text-white/20 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                    >
+                      <Trash2 size={18} />
                     </button>
-                    <span className="font-bold text-foreground text-sm">{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="w-7 h-7 bg-slate-800 rounded-full flex items-center justify-center text-slate-500 hover:text-foreground transition-colors">
-                      <Plus size={14} />
-                    </button>
+                  </motion.div>
+                ))
+              )}
+            </div>
+
+            {/* Footer */}
+            {items.length > 0 && (
+              <div className="p-8 border-t border-white/5 glass shadow-2xl space-y-6">
+                <div className="flex justify-between items-end">
+                  <div className="space-y-1">
+                    <span className="text-white/20 text-[10px] font-bold uppercase tracking-[0.3em]">Total Value</span>
+                    <div className="text-3xl font-black text-white italic">${cartTotal.toFixed(2)}</div>
                   </div>
                 </div>
                 
-                <button onClick={() => removeFromCart(item.id)} className="absolute top-4 right-4 text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
-                  <Trash2 size={18} />
+                <button 
+                  onClick={handleCheckout}
+                  className="w-full bg-primary text-white flex items-center justify-center gap-3 h-16 rounded-2xl font-black text-lg uppercase tracking-tighter neon-border hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(139,92,246,0.2)]"
+                >
+                  INITIALIZE CHECKOUT
                 </button>
               </div>
-            ))
-          )}
-        </div>
-
-        {items.length > 0 && (
-          <div className="p-6 border-t border-slate-700 bg-primary shadow-[0_-10px_40px_rgba(0,0,0,0.05)] space-y-4">
-            <div className="flex justify-between items-end mb-4">
-              <span className="text-slate-500 font-bold uppercase tracking-wider text-sm">Subtotal</span>
-              <span className="text-2xl font-black text-foreground">₹{cartTotal.toFixed(2)}</span>
-            </div>
-            <p className="text-sm text-slate-400 text-center mb-2">Shipping and taxes calculated at checkout.</p>
-            <button 
-              onClick={handleCheckout}
-              className="w-full bg-accent text-primary flex items-center justify-center gap-2 h-14 rounded-full font-black text-lg hover:scale-[1.02] shadow-[0_0_20px_rgba(224,122,95,0.3)] transition-transform"
-            >
-              Proceed to Checkout
-            </button>
-          </div>
-        )}
-      </div>
-    </>
+            )}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }

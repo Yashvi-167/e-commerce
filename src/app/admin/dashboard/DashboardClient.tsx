@@ -1,48 +1,43 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Trash2, Plus, LogOut, Package } from "lucide-react";
+import { useState } from "react";
+import { Trash2, Plus, LogOut, Package, Users, ShoppingCart, DollarSign, ArrowRight, Ghost, Sparkles, User } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
-export default function DashboardClient({ initialProducts }: { initialProducts: any[] }) {
+export default function DashboardClient({ 
+  initialProducts, 
+  stats, 
+  role = "ADMIN" 
+}: { 
+  initialProducts: any[], 
+  stats: any, 
+  role?: "ADMIN" | "RETAILER" 
+}) {
   const [productList, setProductList] = useState(initialProducts);
   const router = useRouter();
   
-  // Guard access
-  useEffect(() => {
-    if (!document.cookie.includes("adminAuth=true")) {
-      router.push("/admin");
-    }
-  }, [router]);
-
   const [form, setForm] = useState({ 
     name: "", price: "", description: "", imageUrl: "", department: "Men", category: "Shirts" 
   });
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     try {
       const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
       if (res.ok) {
         setProductList(prev => prev.filter(p => p.id !== id));
-        toast.success("Product permanently deleted from Neon");
-      } else {
-        toast.error("Deletion rejected");
+        toast.success("Signal terminated: Asset removed from vault.", {
+          className: "glass neon-border text-white border-primary/50",
+        });
       }
     } catch {
-      toast.error("Server synchronization failed");
+      toast.error("Shield interference: Protocol failed.");
     }
   };
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
-      name: form.name,
-      price: form.price,
-      description: form.description || "Premium un-described new addition to our catalog.",
-      imageUrl: form.imageUrl || "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80",
-      department: form.department,
-      category: form.category
-    };
+    const payload = { ...form, price: parseFloat(form.price) };
 
     try {
       const res = await fetch(`/api/products`, {
@@ -51,136 +46,184 @@ export default function DashboardClient({ initialProducts }: { initialProducts: 
       });
       if (res.ok) {
         const newProd = await res.json();
-        setProductList(prev => [...prev, newProd]);
-        toast.success(`Inventory updated: ${payload.name} created!`);
+        setProductList(prev => [newProd, ...prev]);
+        toast.success(`Registry Synchronized: ${payload.name} deployed!`, {
+          className: "glass neon-border text-white border-primary/50",
+        });
         setForm({ name: "", price: "", description: "", imageUrl: "", department: "Men", category: "Shirts" });
       }
     } catch {
-      toast.error("Database mutation failed");
+      toast.error("Registry Mutation Failure.");
     }
   };
 
-  const handleLogout = () => {
-    document.cookie = "adminAuth=; max-age=0; path=/";
-    router.push("/admin");
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
   };
 
   return (
-    <main className="min-h-screen bg-primary font-sans">
-      {/* Top Navbar */}
-      <nav className="border-b border-slate-700/50 bg-secondary/30 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-primary">
-            <Package size={20} />
-          </div>
-          <div>
-            <h1 className="text-xl font-black text-foreground tracking-tight uppercase">Admin Console</h1>
-            <p className="text-xs text-slate-400 font-bold tracking-wider">Neon DB Connected</p>
-          </div>
-        </div>
-        <button onClick={handleLogout} className="flex items-center gap-2 text-slate-400 hover:text-accent font-bold transition-colors">
-          <LogOut size={16} /> Logout
-        </button>
-      </nav>
-
-      <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col lg:flex-row gap-8">
+    <main className="min-h-screen bg-background text-foreground pb-20 pt-10 px-6">
+      <div className="max-w-7xl mx-auto space-y-12">
         
-        {/* Creation Form Panel */}
-        <div className="lg:w-1/3 space-y-6">
-          <div className="bg-secondary p-6 rounded-3xl border border-slate-700/50 shadow-lg sticky top-8">
-            <h2 className="text-xl font-black text-foreground uppercase tracking-tight mb-6 flex items-center gap-2">
-              <Plus size={20} className="text-accent" /> New Product
-            </h2>
-            
-            <form onSubmit={handleCreate} className="space-y-4">
-              <div>
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 block">Name</label>
-                <input required value={form.name} onChange={e=>setForm({...form, name: e.target.value})} className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-accent" />
-              </div>
-              <div>
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 block">Price</label>
-                <input required type="number" step="0.01" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-accent" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 block">Dept</label>
-                  <select value={form.department} onChange={e=>setForm({...form, department: e.target.value})} className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-accent">
-                    <option value="Men">Men</option>
-                    <option value="Women">Women</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 block">Cat</label>
-                  <select value={form.category} onChange={e=>setForm({...form, category: e.target.value})} className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-foreground focus:outline-none focus:border-accent">
-                    <option value="Shirts">Shirts</option>
-                    <option value="T-Shirts">T-Shirts</option>
-                    <option value="Pants">Pants</option>
-                    <option value="Jeans">Jeans</option>
-                    <option value="Dresses">Dresses</option>
-                    <option value="Kurta">Kurta</option>
-                    <option value="Footwear">Footwear</option>
-                    <option value="Accessories">Accessories</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 block">Image URL</label>
-                <input value={form.imageUrl} onChange={e=>setForm({...form, imageUrl: e.target.value})} placeholder="https://unsplash..." className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-accent" />
-              </div>
-              <button type="submit" className="w-full bg-accent text-primary font-bold py-3 rounded-xl hover:scale-[1.02] transition-transform mt-4">
-                Push to Neon
-              </button>
-            </form>
-          </div>
-        </div>
-
-        {/* Database Grid */}
-        <div className="lg:w-2/3 bg-secondary rounded-3xl border border-slate-700/50 shadow-lg overflow-hidden flex flex-col h-[700px]">
-          <div className="px-6 py-5 border-b border-slate-700/50 bg-slate-800/50 flex justify-between items-center">
-            <h2 className="text-xl font-black text-foreground uppercase tracking-tight">Active Inventory</h2>
-            <span className="text-accent font-bold bg-accent/10 px-3 py-1 rounded-full text-xs">{productList.length} Items</span>
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-2 text-primary font-bold tracking-[0.3em] uppercase text-xs"
+            >
+              <Ghost size={14} />
+              {role === "ADMIN" ? "Central Intelligence // Admin" : "Merchant Node // Retailer"}
+            </motion.div>
+            <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+              {role === "ADMIN" ? "Console.Main" : "Vault.Manager"}
+            </h1>
           </div>
           
-          <div className="flex-1 overflow-y-auto w-full">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-800/80 text-slate-400 text-xs uppercase tracking-widest border-b border-slate-700/50 sticky top-0 z-10">
-                  <th className="px-6 py-4 font-bold">Product</th>
-                  <th className="px-6 py-4 font-bold">Category</th>
-                  <th className="px-6 py-4 font-bold">Price</th>
-                  <th className="px-6 py-4 font-bold text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800">
-                {productList.map(product => (
-                  <tr key={product.id} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-4 flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-lg bg-slate-800 overflow-hidden border border-slate-700">
-                        <img src={product.imageUrl} alt="" className="w-full h-full object-cover" />
-                      </div>
-                      <span className="font-bold text-foreground text-sm">{product.name}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col text-xs">
-                        <span className="font-bold text-slate-300">{product.department}</span>
-                        <span className="text-slate-500">{product.category}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 font-bold text-accent text-sm">
-                      ₹{Number(product.price).toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button onClick={() => handleDelete(product.id)} className="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-colors">
-                        <Trash2 size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <button onClick={handleLogout} className="glass px-6 py-3 rounded-xl flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-white/40 hover:text-red-500 hover:neon-border transition-all w-max">
+            <LogOut size={16} /> TERMINATE SESSION
+          </button>
         </div>
 
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { label: "Revenue Flux", value: stats.totalRevenue || stats.myRevenue, icon: <DollarSign size={20} />, trend: "+24% Signal" },
+            { label: role === "ADMIN" ? "Active Nodes" : "Customer Reach", value: stats.activeUsers || stats.customerReach, icon: <Users size={20} />, trend: "Stable" },
+            { label: role === "ADMIN" ? "Pending Tasks" : "Active Orders", value: stats.pendingOrders || stats.activeOrders, icon: <ShoppingCart size={20} />, trend: "Action Req" },
+            { label: role === "ADMIN" ? "Total Assets" : "Total Listings", value: stats.totalProducts || stats.totalListings, icon: <Package size={20} />, trend: "Syncing" }
+          ].map((stat, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.1 }}
+              className="glass-card p-8 space-y-6 border-white/5"
+            >
+              <div className="flex items-center justify-between">
+                <div className="p-3 glass rounded-xl text-primary">{stat.icon}</div>
+                <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">{stat.trend}</span>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">{stat.label}</p>
+                <p className="text-3xl font-black tracking-tighter text-white">{stat.value}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Creation Panel */}
+          <motion.div 
+             initial={{ opacity: 0, x: -20 }}
+             animate={{ opacity: 1, x: 0 }}
+             className="space-y-6"
+          >
+            <div className="glass-card p-10 border-white/5 space-y-8 sticky top-32">
+              <div className="space-y-2">
+                <h2 className="text-2xl font-black uppercase tracking-tighter">Manifest New Asset</h2>
+                <div className="w-12 h-1 bg-primary rounded-full" />
+              </div>
+
+              <form onSubmit={handleCreate} className="space-y-6">
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold tracking-[0.3em] text-white/20 uppercase ml-4">Identifier // Name</label>
+                    <input required value={form.name} onChange={e=>setForm({...form, name: e.target.value})} className="w-full glass rounded-xl px-4 py-3 text-xs font-bold text-white focus:outline-none focus:neon-border transition-all border-white/5" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold tracking-[0.3em] text-white/20 uppercase ml-4">Value // Price</label>
+                    <input required type="number" step="0.01" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} className="w-full glass rounded-xl px-4 py-3 text-xs font-bold text-white focus:outline-none focus:neon-border transition-all border-white/5" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold tracking-[0.3em] text-white/20 uppercase ml-4">Sector // Dept</label>
+                      <select value={form.department} onChange={e=>setForm({...form, department: e.target.value})} className="w-full glass rounded-xl px-4 py-3 text-[10px] font-bold text-white focus:outline-none focus:neon-border transition-all appearance-none border-white/5 bg-black/40">
+                        <option value="Men">Men</option>
+                        <option value="Women">Women</option>
+                      </select>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold tracking-[0.3em] text-white/20 uppercase ml-4">Type // Cat</label>
+                      <select value={form.category} onChange={e=>setForm({...form, category: e.target.value})} className="w-full glass rounded-xl px-4 py-3 text-[10px] font-bold text-white focus:outline-none focus:neon-border transition-all appearance-none border-white/5 bg-black/40">
+                        {['Shirts', 'T-Shirts', 'Pants', 'Jeans', 'Dresses', 'Footwear', 'Accessories'].map(c => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" className="w-full bg-primary text-white font-black py-4 rounded-2xl hover:neon-border transition-all uppercase tracking-[0.2em] text-xs">
+                  EXECUTE MANIFEST
+                </button>
+              </form>
+            </div>
+          </motion.div>
+
+          {/* Asset List */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="lg:col-span-2 space-y-6"
+          >
+            <div className="glass-card overflow-hidden border-white/5 flex flex-col h-[700px]">
+              <div className="px-8 py-6 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
+                <h2 className="text-xl font-black uppercase tracking-tighter">
+                  {role === "ADMIN" ? "Active Signals // Global Inventory" : "Sector Assets // My Products"}
+                </h2>
+                <span className="glass px-4 py-1 rounded-full text-[10px] font-bold text-primary tracking-widest">{productList.length} ASSETS REGISTERED</span>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto w-full scrollbar-hide">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-black text-white/20 text-[10px] font-bold uppercase tracking-widest border-b border-white/5 sticky top-0 z-10 backdrop-blur-md">
+                      <th className="px-8 py-5">Object</th>
+                      {role === "ADMIN" && <th className="px-8 py-5 text-center">Owner</th>}
+                      <th className="px-8 py-5">Sector</th>
+                      <th className="px-8 py-5">Value</th>
+                      <th className="px-8 py-5 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {productList.map(product => (
+                      <tr key={product.id} className="hover:bg-white/[0.02] transition-colors group">
+                        <td className="px-8 py-6 flex items-center gap-5">
+                          <div className="w-14 h-14 rounded-xl glass overflow-hidden border-white/5 bg-black/40">
+                            <img src={product.imageUrl} alt="" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-bold text-white text-sm uppercase tracking-tight">{product.name}</span>
+                            <span className="text-[10px] font-bold text-white/20 tracking-widest uppercase">ID: {String(product.id).substring(0, 8)}</span>
+                          </div>
+                        </td>
+                        {role === "ADMIN" && (
+                          <td className="px-8 py-6 text-center">
+                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{product.retailer?.email || "SYSTEM"}</span>
+                          </td>
+                        )}
+                        <td className="px-8 py-6">
+                          <div className="glass px-3 py-1 rounded-full text-[10px] font-bold text-white/40 tracking-widest uppercase border-white/10 w-max">
+                            {product.department} // {product.category}
+                          </div>
+                        </td>
+                        <td className="px-8 py-6">
+                           <span className="text-white font-black italic">${Number(product.price).toFixed(2)}</span>
+                        </td>
+                        <td className="px-8 py-6 text-right">
+                          <button onClick={() => handleDelete(product.id)} className="p-3 glass rounded-xl text-white/10 hover:text-red-500 hover:neon-border transition-all">
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </main>
   );
