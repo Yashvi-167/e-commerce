@@ -20,7 +20,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
         
-        {/* Restore CDN for immediate styling reliability, but configured for BELLE AME Pink */}
+        {/* Load Tailwind CDN properly via next/script to avoid hydration errors */}
         <Script 
           src="https://cdn.tailwindcss.com" 
           strategy="beforeInteractive"
@@ -85,7 +85,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className="min-h-full flex flex-col font-sans text-black">
+      <body className="min-h-full flex flex-col font-sans">
         {children}
         <Toaster 
           position="bottom-right" 
