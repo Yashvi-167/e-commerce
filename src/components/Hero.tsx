@@ -20,7 +20,7 @@ export default function Hero() {
             className="flex items-center justify-center lg:justify-start gap-3"
           >
             <div className="h-[2px] w-12 bg-accent rounded-full" />
-            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-accent">Antigravity // Pastel Protocol</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-accent">BELLE AME</span>
           </motion.div>
 
           <motion.h1 
@@ -39,7 +39,7 @@ export default function Hero() {
             transition={{ delay: 0.2 }}
             className="text-xl md:text-2xl text-black/40 font-medium max-w-lg leading-relaxed lowercase tracking-tight"
           >
-            Experience the weightless side of premium essentials. Curated objects in a pallet of sunset oranges and pastel pinks.
+            Experience the weightless side of premium essentials. Curated objects in a palette of soft roses and pastel pinks.
           </motion.p>
 
           <motion.div 
@@ -52,25 +52,23 @@ export default function Hero() {
               href="/collections" 
               className="group bg-black text-white px-10 py-5 rounded-2xl font-black text-lg uppercase tracking-tighter flex items-center gap-3 transition-all hover:scale-105 active:scale-95 shadow-xl hover:shadow-accent/20"
             >
-              INITIALIZE DISCOVERY
+              SHOP NOW
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-            <div className="flex -space-x-4">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="w-12 h-12 rounded-full border-4 border-white bg-secondary/50 flex items-center justify-center overflow-hidden">
-                   <img src={`https://i.pravatar.cc/150?u=user${i}`} alt="" />
-                </div>
-              ))}
-              <div className="w-12 h-12 rounded-full border-4 border-white bg-black flex items-center justify-center text-white text-[10px] font-black">
-                +4k
-              </div>
+            
+            <div className="flex items-center gap-2 glass px-6 py-3 rounded-2xl border-white/20">
+               <span className="text-[10px] font-black uppercase tracking-widest text-black/30 mr-2">Explore Categories</span>
+               {['Men', 'Women', 'Kids'].map(dept => (
+                 <Link key={dept} href={`/collections?dept=${dept}`} className="text-[10px] font-black uppercase tracking-widest text-black hover:text-accent transition-colors">
+                    {dept}
+                 </Link>
+               ))}
             </div>
           </motion.div>
         </div>
 
-        {/* Right Floating Cards */}
+        {/* Right Floating Cards (Restored) */}
         <div className="relative h-[500px] md:h-[600px] flex items-center justify-center">
-           {/* Main Float Card */}
            <motion.div 
              animate={{ y: [0, -20, 0], rotate: [0, 2, 0] }}
              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -81,8 +79,8 @@ export default function Hero() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
                    <div className="space-y-1">
-                      <p className="text-[10px] font-black text-white uppercase tracking-widest">New Arrival</p>
-                      <h3 className="text-xl font-black text-white uppercase tracking-tighter italic leading-none">Aura.X1</h3>
+                      <p className="text-[10px] font-black text-white uppercase tracking-widest">Premium Selection</p>
+                      <h3 className="text-xl font-black text-white uppercase tracking-tighter italic leading-none">BELLE AME Core</h3>
                    </div>
                    <div className="w-10 h-10 rounded-full glass flex items-center justify-center text-white">
                       <ShoppingBag size={18} />
@@ -91,7 +89,6 @@ export default function Hero() {
              </div>
            </motion.div>
 
-           {/* Small Accent Card */}
            <motion.div 
              animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
@@ -100,25 +97,14 @@ export default function Hero() {
              <div className="space-y-4">
                <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-accent animate-ping" />
-                  <span className="text-[8px] font-black uppercase tracking-widest text-black/60">Live // Registry</span>
+                  <span className="text-[8px] font-black uppercase tracking-widest text-black/60">New Arrivals</span>
                </div>
                <div className="h-1 bg-black/5 rounded-full overflow-hidden">
-                 <motion.div 
-                   animate={{ width: ["100%", "30%", "100%"] }}
-                   transition={{ duration: 4, repeat: Infinity }}
-                   className="h-full bg-accent" 
-                 />
+                 <motion.div animate={{ width: ["100%", "30%", "100%"] }} transition={{ duration: 4, repeat: Infinity }} className="h-full bg-accent" />
                </div>
-               <p className="text-[10px] font-bold text-black uppercase italic leading-tight">95.4% Sync Correctness</p>
+               <p className="text-[10px] font-bold text-black uppercase italic leading-tight">Stock Updated</p>
              </div>
            </motion.div>
-
-           {/* Backdrop Card */}
-           <motion.div 
-             animate={{ scale: [1, 1.05, 1], rotate: [0, -3, 0] }}
-             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-             className="absolute -bottom-10 -left-10 w-64 h-64 bg-secondary/50 blur-[40px] rounded-[3rem] z-10"
-           />
         </div>
 
       </div>

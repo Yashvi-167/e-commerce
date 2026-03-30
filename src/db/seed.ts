@@ -14,96 +14,192 @@ const db = drizzle(sql);
 const baseShipping = "Dispatches within 24 hours. Premium rigid packaging to ensure perfect transit condition.";
 
 const seedProducts = [
+  // --- MEN ---
   { 
-    name: "Premium Alpha Rain Jacket", 
-    price: "299.99", compareAtPrice: "350.00",
-    description: "Conquer any climate with the Alpha Rain Jacket. Featuring proprietary water-resistant architecture, this jacket is engineered to keep you bone dry while preventing overheating.", 
-    imageUrl: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80", 
-    department: "Men", category: "Shirts",
-    sku: "AUR-M-JCK-01", inventory: 45, vendor: "AURALIS EXPERIMENTAL", tags: "jacket, waterproof, premium, winter",
-    metaTitle: "Premium Alpha Rain Jacket | Waterproof Men's Outerwear",
-    metaDescription: "Shop the AURALIS Alpha Rain Jacket. Engineered with proprietary water-resistant micro-mesh to keep you dry and comfortable.",
-    features: ["100k Waterproof rating", "Breathable micro-mesh lining", "Hidden tactical pockets", "Matte black hardware"],
-    variants: ["S", "M", "L", "XL", "XXL"],
-    reviewsRating: "4.95", reviewsCount: 342, shippingInfo: baseShipping
+    name: "Classic Indigo Selvedge Jeans", 
+    price: "145.00", compareAtPrice: "180.00",
+    description: "Premium raw indigo selvedge denim. These jeans are designed to age beautifully, creating unique fades tailored to your life.", 
+    imageUrl: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80", 
+    department: "Men", category: "Jeans",
+    sku: "BME-M-JN-01", inventory: 50, vendor: "BELLE AME DENIM", tags: "jeans, denim, men, classic",
+    features: ["14.5oz Raw Selvedge Denim", "Button Fly", "Reinforced Pockets"],
+    variants: ["30x30", "32x32", "34x32", "36x34"]
   },
   { 
-    name: "Essential Modal T-Shirt", 
-    price: "45.00", compareAtPrice: "55.00",
-    description: "The perfect everyday comfortable fit. Knitted using ultra-soft organic cotton and linen blends, solving the problem of stiff, itchy everyday wear.", 
+    name: "Oversized Heavyweight T-Shirt", 
+    price: "55.00",
+    description: "A thick, structured t-shirt that maintains its shape. Made from 300GSM organic cotton for a premium, heavy feel.", 
     imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80", 
     department: "Men", category: "T-Shirts",
-    sku: "AUR-M-TEE-02", inventory: 210, vendor: "AURALIS BASICS", tags: "tshirt, basic, cotton, everyday",
-    metaTitle: "Essential Modal T-Shirt | Premium Men's Basics",
-    metaDescription: "Upgrade your basics with our ultra-soft organic cotton and linen T-shirt. Engineered to prevent shrinking and pilling.",
-    features: ["Zero-shrink fabric wash", "Tagless collar to prevent irritation", "Reinforced double-stitched hem"],
-    variants: ["XS", "S", "M", "L", "XL"],
-    reviewsRating: "4.8", reviewsCount: 1564, shippingInfo: baseShipping
+    sku: "BME-M-TS-01", inventory: 150, vendor: "BELLE AME BASICS", tags: "tshirt, cotton, oversized, men",
+    features: ["300GSM Organic Cotton", "Dropped Shoulders", "Double-Stitched Hem"],
+    variants: ["S", "M", "L", "XL"]
   },
   { 
-    name: "Utility Cargo Pants", 
-    price: "189.50", compareAtPrice: "210.00",
-    description: "Utility-first cargo pants with multiple accessible pockets. Built to endure heavy physical wear while retaining a tailored, highly sophisticated silhouette.", 
-    imageUrl: "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?auto=format&fit=crop&q=80", 
-    department: "Men", category: "Pants",
-    sku: "AUR-M-PNT-03", inventory: 60, vendor: "AURALIS EXPERIMENTAL", tags: "pants, cargo, utility, durable",
-    metaTitle: "Utility Cargo Pants | Durable Men's High-Fashion Cargos",
-    metaDescription: "Shop the ultimate heavy-duty Utility Cargo Pants by AURALIS. Tailored silhouette matching intense durability.",
-    features: ["12oz Heavyweight cotton canvas", "Adjustable magnetic ankle stops", "6 deep-storage utility pockets"],
-    variants: ["28x30", "30x30", "32x32", "34x32", "36x34"],
-    reviewsRating: "4.9", reviewsCount: 228, shippingInfo: baseShipping
+    name: "Executive Oxford Shirt", 
+    price: "85.00", compareAtPrice: "110.00",
+    description: "The essential office shirt. Crisp, breathable, and wrinkle-resistant for the modern professional.", 
+    imageUrl: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&q=80", 
+    department: "Men", category: "Shirts",
+    sku: "BME-M-SH-01", inventory: 80, vendor: "BELLE AME TAIOR", tags: "shirt, oxford, office, men",
+    features: ["Pima Cotton", "Tailored Fit", "Adjustable Cuffs"],
+    variants: ["15", "15.5", "16", "16.5", "17"]
   },
   { 
-    name: "AURALIS Performance Sneaker", 
-    price: "245.00", compareAtPrice: "300.00",
-    description: "Maximum performance sneaker for constant motion. Solves foot fatigue with our revolutionary foam midsole designed to return energy upon impact.", 
+    name: "Nomad Tech Bomber Jacket", 
+    price: "220.00",
+    description: "Weather-resistant shell with a minimalist silhouette. Perfect for urban exploration and changing climates.", 
+    imageUrl: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80", 
+    department: "Men", category: "Jackets",
+    sku: "BME-M-JK-01", inventory: 35, vendor: "BELLE AME TECH", tags: "jacket, bomber, techwear, men",
+    features: ["Water-repellent Finish", "Internal Chest Pocket", "Ribbed Trims"],
+    variants: ["M", "L", "XL"]
+  },
+  { 
+    name: "Urban Explorer Sneakers", 
+    price: "165.00", compareAtPrice: "195.00",
+    description: "Lightweight sneakers designed for all-day comfort. Features a responsive sole and breathable knit upper.", 
     imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80", 
     department: "Men", category: "Footwear",
-    sku: "AUR-M-SH-04", inventory: 8, vendor: "AURALIS FOOTWEAR", tags: "shoes, sneaker, performance, athletic",
-    metaTitle: "AURALIS Performance Sneaker | Advanced Energy Return Shoes",
-    metaDescription: "Experience zero foot fatigue with the AURALIS Performance Sneaker. Designed for relentless urban traversal.",
-    features: ["Energy-return foam midsole", "Carbon-fiber flex plate", "Breathable knit upper"],
-    variants: ["US 8", "US 9", "US 10", "US 11", "US 12"],
-    reviewsRating: "4.99", reviewsCount: 512, shippingInfo: baseShipping
+    sku: "BME-M-FW-01", inventory: 40, vendor: "BELLE AME STEPS", tags: "sneakers, footwear, men, athletic",
+    features: ["Memory Foam Insole", "Vibram Outsole", "Recycled Mesh"],
+    variants: ["8", "9", "10", "11", "12"]
   },
+
+  // --- WOMEN ---
   { 
-    name: "Silk Slip Night Dress", 
-    price: "175.00", compareAtPrice: null,
-    description: "An elegant, timeless silk dress that flows effortlessly. Naturally thermoregulating silk keeps you cool during warm evenings while maintaining an opulent luster.", 
-    imageUrl: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&q=80", 
-    department: "Women", category: "Dresses",
-    sku: "AUR-W-DR-05", inventory: 120, vendor: "AURALIS LUXE", tags: "dress, silk, evening, formal",
-    metaTitle: "Silk Slip Night Dress | Luxury Women's Eveningwear",
-    metaDescription: "Exude pure elegance with the AURALIS Silk Slip Night Dress. 100% natural thermoregulating silk for summer evenings.",
-    features: ["100% Mulberry Silk", "Adjustable delicate straps", "Naturally hypoallergenic"],
-    variants: ["XS", "S", "M", "L"],
-    reviewsRating: "4.85", reviewsCount: 405, shippingInfo: baseShipping
-  },
-  { 
-    name: "Classic Straight Denim Jeans", 
-    price: "95.00", compareAtPrice: null,
-    description: "Timeless straight cut denim for every occasion. A rigid, vintage feel that molds perfectly to your body over time, eradicating the 'too stretchy' feel of modern denim.", 
+    name: "High-Rise Distressed Jeans", 
+    price: "120.00",
+    description: "Elevated denim with subtle distressing for a lived-in look. Flattering high-rise cut with a touch of stretch.", 
     imageUrl: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80", 
     department: "Women", category: "Jeans",
-    sku: "AUR-W-JN-06", inventory: 300, vendor: "AURALIS DENIM", tags: "jeans, denim, straight, vintage",
-    metaTitle: "Classic Straight Denim Jeans | Rigid Women's Vintage Denim",
-    metaDescription: "Genuine rigid 14oz denim straight jeans by AURALIS. Vintage cut designed to permanently mold to your proportions.",
-    features: ["14oz Rigid non-stretch denim", "High-rise waist", "Raw copper rivets"],
-    variants: ["24", "25", "26", "27", "28", "29", "30", "31"],
-    reviewsRating: "4.7", reviewsCount: 88, shippingInfo: baseShipping
+    sku: "BME-W-JN-01", inventory: 60, vendor: "BELLE AME DENIM", tags: "jeans, denim, women, high-rise",
+    features: ["Stretch Denim", "Reinforced Seams", "Classic 5-pocket design"],
+    variants: ["24", "26", "28", "30", "32"]
   },
   { 
-    name: "Cognac Leather Tote Bag", 
-    price: "280.00", compareAtPrice: "340.00",
-    description: "Carry all your essentials securely in pure, hand-crafted leather. Includes a padded laptop sleeve and multiple organizational compartments to eliminate bag clutter.", 
-    imageUrl: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&q=80", 
+    name: "Luxe Cashmere T-Shirt", 
+    price: "95.00", compareAtPrice: "125.00",
+    description: "Unbelievably soft cashmere blend. A t-shirt that brings luxury to your everyday rotation.", 
+    imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80", 
+    department: "Women", category: "T-Shirts",
+    sku: "BME-W-TS-01", inventory: 45, vendor: "BELLE AME LUXE", tags: "tshirt, cashmere, luxury, women",
+    features: ["70% Cashmere", "Seamless Construction", "Relaxed Fit"],
+    variants: ["XS", "S", "M", "L"]
+  },
+  { 
+    name: "Silk Flow Blouse", 
+    price: "110.00",
+    description: "Elegant silk blouse with a draped silhouette. Transitions perfectly from office to evening.", 
+    imageUrl: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&q=80", 
+    department: "Women", category: "Shirts",
+    sku: "BME-W-SH-01", inventory: 30, vendor: "BELLE AME LUXE", tags: "shirt, blouse, silk, women",
+    features: ["100% Silk", "Pearl Buttons", "Side Slits"],
+    variants: ["S", "M", "L"]
+  },
+  { 
+    name: "Minimalist Trench Coat", 
+    price: "280.00", compareAtPrice: "350.00",
+    description: "A modern take on the classic trench. Water-resistant and incredibly sharp.", 
+    imageUrl: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80", 
+    department: "Women", category: "Jackets",
+    sku: "BME-W-JK-01", inventory: 20, vendor: "BELLE AME OUTER", tags: "jacket, trench, coat, women",
+    features: ["Recycled Polyester", "Belted Waist", "Deep Pockets"],
+    variants: ["S", "M", "L"]
+  },
+  { 
+    name: "Midnight Velvet Heels", 
+    price: "185.00",
+    description: "Stunning velvet heels for special occasions. Features a comfortable block heel for all-night wear.", 
+    imageUrl: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80", 
+    department: "Women", category: "Footwear",
+    sku: "BME-W-FW-01", inventory: 25, vendor: "BELLE AME STEPS", tags: "heels, footwear, women, dressy",
+    features: ["Premium Velvet", "Cushioned Sole", "Gold Hardware"],
+    variants: ["6", "7", "8", "9"]
+  },
+  { 
+    name: "Satin Slip Midi Dress", 
+    price: "135.00",
+    description: "The ultimate 90s inspired slip dress. Shimmering satin that hugs the body beautifully.", 
+    imageUrl: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&q=80", 
+    department: "Women", category: "Dresses",
+    sku: "BME-W-DR-01", inventory: 40, vendor: "BELLE AME LUXE", tags: "dress, satin, women, midi",
+    features: ["Satin Finish", "Side Slit", "Adjustable Straps"],
+    variants: ["XS", "S", "M", "L"]
+  },
+
+  // --- KIDS ---
+  { 
+    name: "Comfy Stretch Kids Jeans", 
+    price: "45.00",
+    description: "Durable and stretchy jeans designed for active kids. Features an adjustable waistband.", 
+    imageUrl: "https://images.unsplash.com/photo-1519457431-7571f0181e4b?auto=format&fit=crop&q=80", 
+    department: "Kids", category: "Jeans",
+    sku: "BME-K-JN-01", inventory: 90, vendor: "BELLE AME MINI", tags: "jeans, kids, denim, adjustable",
+    features: ["4-Way Stretch", "Adjustable Waist", "Soft Lining"],
+    variants: ["2T", "3T", "4T", "5", "6"]
+  },
+  { 
+    name: "Graphic Adventure T-Shirt", 
+    price: "25.00",
+    description: "Fun, high-quality graphic tee made from soft organic cotton.", 
+    imageUrl: "https://images.unsplash.com/photo-1519235108751-14e2732a2e3b?auto=format&fit=crop&q=80", 
+    department: "Kids", category: "T-Shirts",
+    sku: "BME-K-TS-01", inventory: 200, vendor: "BELLE AME MINI", tags: "tshirt, graphic, kids, cotton",
+    features: ["Organic Cotton", "Breathable Print", "Tagless Neck"],
+    variants: ["S", "M", "L"]
+  },
+  { 
+    name: "Denim Button-Down Shirt", 
+    price: "38.00",
+    description: "A stylish denim shirt for the little ones. Durable enough for the playground.", 
+    imageUrl: "https://images.unsplash.com/photo-1471286174890-9c112ffca5b4?auto=format&fit=crop&q=80", 
+    department: "Kids", category: "Shirts",
+    sku: "BME-K-SH-01", inventory: 55, vendor: "BELLE AME MINI", tags: "shirt, denim, kids, stylish",
+    features: ["Heavy Duty Buttons", "Reinforced Elbows", "Soft-Wash Denim"],
+    variants: ["3T", "4T", "5", "6"]
+  },
+  { 
+    name: "Puffer Warmth Jacket", 
+    price: "75.00", compareAtPrice: "95.00",
+    description: "Insulated and water-resistant. Keeps them warm and dry in the coldest weather.", 
+    imageUrl: "https://images.unsplash.com/photo-1515233261667-d8ad62106180?auto=format&fit=crop&q=80", 
+    department: "Kids", category: "Jackets",
+    sku: "BME-K-JK-01", inventory: 60, vendor: "BELLE AME MINI", tags: "jacket, puffer, kids, winter",
+    features: ["Down Alternative Fill", "Detachable Hood", "Reflective safety strips"],
+    variants: ["S", "M", "L"]
+  },
+  { 
+    name: "Daily Play Sneakers", 
+    price: "55.00",
+    description: "Easy-on sneakers with elastic laces. Designed for comfort and support during play.", 
+    imageUrl: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&q=80", 
+    department: "Kids", category: "Footwear",
+    sku: "BME-K-FW-01", inventory: 100, vendor: "BELLE AME MINI", tags: "sneakers, footwear, kids, elastic",
+    features: ["Elastic Laces", "Non-marking Sole", "Padded Collar"],
+    variants: ["10", "11", "12", "13", "1"]
+  },
+
+  // --- ACCESSORIES ---
+  { 
+    name: "Signature Leather Belt", 
+    price: "65.00",
+    description: "Italian leather belt with a minimalist silver buckle. A timeless accessory for any outfit.", 
+    imageUrl: "https://images.unsplash.com/photo-1554444577-be9422559784?auto=format&fit=crop&q=80", 
+    department: "Men", category: "Accessories",
+    sku: "BME-A-AC-01", inventory: 70, vendor: "BELLE AME ACC", tags: "belt, leather, men, luxury",
+    features: ["Full Grain Leather", "Silver-Finished Buckle", "Hand-stitched Edge"],
+    variants: ["32", "34", "36"]
+  },
+  { 
+    name: "Silk Neck Scarf", 
+    price: "45.00",
+    description: "Add a touch of elegance to your look with this hand-finished silk scarf.", 
+    imageUrl: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&q=80", 
     department: "Women", category: "Accessories",
-    sku: "AUR-W-ACC-07", inventory: 22, vendor: "AURALIS CRAFT", tags: "bag, leather, tote, accessories",
-    metaTitle: "Cognac Leather Tote Bag | Hand-Crafted Luxury Carrier",
-    metaDescription: "The ultimate AURALIS Cognac Leather Tote Bag. Features organized compartments and an internal laptop sleeve for seamless commutes.",
-    features: ["Full-grain Italian leather", "Brass protective feet", "Dedicated 15-inch laptop sleeve", "Waterproof internal lining"],
-    variants: ["Cognac", "Obsidian Black"],
-    reviewsRating: "5.00", reviewsCount: 30, shippingInfo: baseShipping
+    sku: "BME-A-AC-02", inventory: 100, vendor: "BELLE AME ACC", tags: "scarf, silk, women, accessory",
+    features: ["100% Silk", "Hand-rolled Edges", "Unique Print"],
+    variants: ["One Size"]
   }
 ];
 
@@ -111,7 +207,7 @@ async function main() {
   console.log("Emptying old database records to reset IDs...");
   await db.delete(products);
 
-  console.log("Seeding extreme rich products data...");
+  console.log(`Seeding ${seedProducts.length} diverse products...`);
   for (const product of seedProducts) {
     await db.insert(products).values(product);
   }

@@ -1,6 +1,6 @@
 "use client";
 import { useCart } from "@/components/CartProvider";
-import { ArrowLeft, CheckCircle2, ShieldCheck, CreditCard, Sparkles, Ghost, Package } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ShieldCheck, CreditCard, Sparkles, Ghost, Package, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -26,17 +26,17 @@ export default function CheckoutPage() {
       setIsProcessing(false);
       setIsSuccess(true);
       if (clearCart) clearCart();
-      toast.success("Transaction localized and verified.", {
-        className: "glass border-accent text-black font-black uppercase text-[10px] tracking-widest",
-        icon: <Sparkles className="text-accent" size={16} />
-      });
+    toast.success("Payment processed successfully.", {
+      className: "glass border-accent text-black font-black uppercase text-[10px] tracking-widest",
+      icon: <Sparkles className="text-accent" size={16} />
+    });
     }, 2500);
   }
 
   if (isSuccess) {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-background text-center">
-        <motion.div 
+        <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           className="glass-card p-16 flex flex-col items-center gap-8 max-w-xl border-accent/20 shadow-2xl bg-white"
@@ -45,13 +45,13 @@ export default function CheckoutPage() {
             <CheckCircle2 size={48} />
           </div>
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic text-black leading-none">Sync Complete</h1>
+            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic text-black leading-none">Order Confirmed</h1>
             <p className="text-black/40 text-lg leading-relaxed lowercase font-medium">
-              Your transmission has been verified. Assets are currently being routed to your coordinates.
+              Thank you for your purchase. Your order has been received and is being prepared for shipment.
             </p>
           </div>
           <Link href="/collections" className="bg-black text-white font-black uppercase text-lg px-12 py-5 rounded-2xl hover:scale-105 transition-all shadow-xl">
-            RETURN TO GRID
+            CONTINUE SHOPPING
           </Link>
         </motion.div>
       </main>
@@ -61,15 +61,15 @@ export default function CheckoutPage() {
   return (
     <main className="min-h-screen bg-background pb-32 pt-10 px-6 relative overflow-hidden">
       {/* Background gradients */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/20 blur-[120px] rounded-full" />
-      
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[hsla(330,70%,90%,0.5)] blur-[120px] rounded-full" />
+
       <div className="max-w-6xl mx-auto space-y-12 relative z-10">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         >
           <Link href="/collections" className="inline-flex items-center gap-3 text-black/20 hover:text-black font-black uppercase tracking-[0.3em] text-[10px] transition-all group">
-            <ArrowLeft size={16} className="group-hover:-translate-x-2 transition-transform" /> BACK TO SECTOR
+            <ArrowLeft size={16} className="group-hover:-translate-x-2 transition-transform" /> BACK TO COLLECTIONS
           </Link>
         </motion.div>
 
@@ -77,28 +77,28 @@ export default function CheckoutPage() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-accent font-black tracking-[0.4em] uppercase text-[10px]">
               <Sparkles size={14} />
-              Financial // protocol
+              Secure Checkout
             </div>
-            <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none italic text-black">Finalize.Manifest</h1>
+            <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none italic text-black">Order Summary</h1>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           {/* Detailed Bill / Order Summary */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="lg:col-span-2 glass-card p-10 border-black/5 space-y-10 bg-white"
           >
             <div className="flex items-center justify-between border-b border-black/5 pb-6">
-              <h2 className="text-xl font-black uppercase tracking-tighter italic text-black">Registry Summary</h2>
-              <span className="glass px-4 py-1 rounded-full text-[10px] font-black text-accent tracking-widest uppercase border-accent/20">{items.length} ITEMS DETECTED</span>
+              <h2 className="text-xl font-black uppercase tracking-tighter italic text-black">Order Items</h2>
+              <span className="glass px-4 py-1 rounded-full text-[10px] font-black text-accent tracking-widest uppercase border-accent/20">{items.length} ITEMS SELECTED</span>
             </div>
 
             {items.length === 0 ? (
               <div className="py-20 text-center space-y-6 opacity-20">
                 <Ghost size={48} className="text-black mx-auto" />
-                <p className="text-black font-black tracking-widest uppercase italic">No signals found in manifest.</p>
+                <p className="text-black font-black tracking-widest uppercase italic">Your cart is empty.</p>
               </div>
             ) : (
               <div className="space-y-12">
@@ -121,30 +121,30 @@ export default function CheckoutPage() {
 
                 <div className="space-y-6 border-t border-black/5 pt-8">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                     <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
-                        <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Subtotal</p>
-                        <p className="text-xl font-black text-black/60 italic">${cartTotal.toFixed(2)}</p>
-                     </div>
-                     <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
-                        <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Orbital Tax (18%)</p>
-                        <p className="text-xl font-black text-black/60 italic">${tax.toFixed(2)}</p>
-                     </div>
-                     <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
-                        <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Secure Delivery</p>
-                        <p className={`text-xl font-black italic ${shipping === 0 ? "text-accent" : "text-black/60"}`}>
-                          {shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}
-                        </p>
-                     </div>
+                    <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
+                      <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Subtotal</p>
+                      <p className="text-xl font-black text-black/60 italic">${cartTotal.toFixed(2)}</p>
+                    </div>
+                    <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
+                      <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Sales Tax (18%)</p>
+                      <p className="text-xl font-black text-black/60 italic">${tax.toFixed(2)}</p>
+                    </div>
+                    <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
+                      <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Shipping</p>
+                      <p className={`text-xl font-black italic ${shipping === 0 ? "text-accent" : "text-black/60"}`}>
+                        {shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}
+                      </p>
+                    </div>
                   </div>
 
                   <div className="flex justify-between items-end bg-black text-white p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 blur-[50px] rounded-full group-hover:bg-accent/40 transition-all" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 blur-[50px] rounded-full group-hover:bg-accent/40 transition-all shadow-[0_0_20px_rgba(244,143,177,0.3)]" />
                     <div className="space-y-1 relative z-10">
-                      <p className="text-[10px] font-black text-accent uppercase tracking-[0.3em]">Total Credits Due</p>
+                      <p className="text-[10px] font-black text-accent uppercase tracking-[0.3em]">Total Order Value</p>
                       <p className="text-5xl md:text-7xl font-black text-white italic tracking-tighter">${finalTotal.toFixed(2)}</p>
                     </div>
                     <div className="hidden md:block relative z-10">
-                       <ShieldCheck className="text-accent" size={48} />
+                      <ShieldCheck className="text-accent" size={48} />
                     </div>
                   </div>
                 </div>
@@ -154,39 +154,39 @@ export default function CheckoutPage() {
 
           {/* Payment Simulator Block */}
           <div className="space-y-8 sticky top-32">
-            <motion.div 
-               initial={{ opacity: 0, x: 20 }}
-               animate={{ opacity: 1, x: 0 }}
-               className="glass-card p-10 border-black/5 space-y-8 bg-white shadow-2xl"
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="glass-card p-10 border-black/5 space-y-8 bg-white shadow-2xl"
             >
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <CreditCard className="text-accent" size={24} />
                   <h3 className="font-black text-black uppercase tracking-tighter italic text-xl">Authorization</h3>
                 </div>
-                <p className="text-xs text-black/40 font-medium leading-relaxed tracking-wide lowercase">
-                  This transaction is protected by quantum-linked encryption. Initializing checkout will finalize your manifest and clear current cache.
+                <p className="text-[10px] lowercase font-medium text-black/40 leading-relaxed">
+                  This transaction is protected by secure end-to-end encryption. Your order will be processed immediately upon confirmation.
                 </p>
               </div>
-              
+
               <button
                 onClick={handlePay}
                 disabled={isProcessing || items.length === 0}
-                className="w-full bg-black text-white h-20 rounded-2xl font-black text-lg uppercase tracking-tighter flex items-center justify-center gap-4 hover:bg-accent transition-all shadow-xl disabled:opacity-50 group"
+                className="w-full bg-black text-white h-20 rounded-2xl font-black text-lg uppercase tracking-tighter flex items-center justify-center gap-4 hover:shadow-[0_0_30px_rgba(244,143,177,0.4)] transition-all shadow-xl disabled:opacity-50 group"
               >
                 {isProcessing ? (
-                   <div className="flex items-center gap-3">
-                     <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                     VERIFYING...
-                   </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    PROCESSING...
+                  </div>
                 ) : (
-                  <>AUTHORIZE TRANSACTION <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" /></>
+                  <>COMPLETE PURCHASE <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" /></>
                 )}
               </button>
             </motion.div>
 
             <div className="glass-card p-6 border-black/5 text-center bg-white/50 backdrop-blur-sm">
-               <p className="text-[10px] font-black text-black/20 uppercase tracking-[0.3em]">Sector 7 Security Protocol Active</p>
+              <p className="text-[10px] font-black text-black/20 uppercase tracking-[0.3em]">Secure SSL Protocol Active</p>
             </div>
           </div>
         </div>

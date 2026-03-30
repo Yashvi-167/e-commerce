@@ -5,17 +5,17 @@ import { ShoppingBag, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 export default function AddToCartButton({ product }: { product: any }) {
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
 
   const handleAdd = () => {
-    addItem({
+    addToCart({
       id: product.id,
       name: product.name,
       price: Number(product.price),
       image: product.imageUrl,
       quantity: 1
     });
-    toast.success(`${product.name} synchronized to vault.`, {
+    toast.success(`${product.name} added to your cart.`, {
       className: "glass border-accent text-black font-black uppercase text-[10px] tracking-widest",
       icon: <Sparkles className="text-accent" size={16} />
     });
@@ -31,7 +31,7 @@ export default function AddToCartButton({ product }: { product: any }) {
       <div className="absolute inset-0 bg-gradient-to-r from-accent to-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
       <span className="relative z-10 flex items-center gap-4">
         <ShoppingBag size={22} />
-        INITIALIZE SYNC
+        ADD TO CART
       </span>
     </motion.button>
   );

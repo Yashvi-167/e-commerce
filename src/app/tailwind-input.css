@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #111111;
+  --color-primary: #f48fb1;
+  --color-secondary: #fce4ec;
+  --color-accent: #f48fb1;
+  --radius-lg: 1.5rem;
+  --radius-md: 1rem;
+  --radius-sm: 0.5rem;
+  --radius-2xl: 2rem;
+}
+
+@layer base {
+  body {
+    background-color: white;
+    color: #111111;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(330, 100%, 95%, 0.5) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(340, 100%, 93%, 0.5) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+.glass {
+  background: hsla(0, 0%, 100%, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsla(0, 0%, 0%, 0.05);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+}
+
+.glass-card {
+  background: hsla(0, 0%, 100%, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsla(0, 0%, 0%, 0.05);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 2rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glass-card:hover {
+  border-color: #f48fb1;
+  box-shadow: 0 20px 40px hsla(340, 100%, 80%, 0.15);
+  transform: translateY(-8px) scale(1.01);
+}
+
+.pastel-gradient {
+  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+}
+
+.neon-border:focus, .neon-border:hover {
+  border-color: #f48fb1;
+  box-shadow: 0 0 20px hsla(340, 100%, 80%, 0.3);
+  outline: none;
+}

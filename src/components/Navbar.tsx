@@ -3,18 +3,34 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ShoppingCart, User, Menu, X, Ghost, Sparkles, ChevronRight, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useCart } from "./CartProvider";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [session, setSession] = useState<any>(null);
   const { totalItems } = useCart();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
+    
+    // Fetch session
+    fetch("/api/auth/session")
+      .then(res => res.ok ? res.json() : null)
+      .then(data => setSession(data?.user || null));
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    setSession(null);
+    router.push("/login");
+    router.refresh();
+  };
 
   return (
     <nav 
@@ -33,8 +49,8 @@ export default function Navbar() {
             <Ghost size={20} />
           </motion.div>
           <div className="flex flex-col -space-y-1">
-             <span className="text-xl font-black tracking-tighter text-black uppercase italic">Antigravity</span>
-             <span className="text-[8px] font-black tracking-[0.4em] text-accent uppercase">Pastel // Grid</span>
+             <span className="text-xl font-black tracking-tighter text-black uppercase italic">BELLE AME</span>
+             <span className="text-[8px] font-black tracking-[0.4em] text-accent uppercase">Premium Essentials</span>
           </div>
         </Link>
 
@@ -54,9 +70,28 @@ export default function Navbar() {
 
         {/* Action Icons */}
         <div className="flex items-center gap-4">
+          {session && (session.role === "ADMIN" || session.role === "RETAILER") && (
+            <Link 
+              href={session.role === "ADMIN" ? "/admin/dashboard" : "/retailer/dashboard"} 
+              className="hidden lg:flex items-center gap-2 p-3 glass rounded-xl text-[10px] font-black uppercase tracking-widest text-accent hover:bg-accent hover:text-white transition-all shadow-sm border-accent/20 bg-white"
+            >
+              <Sparkles size={14} /> DASHBOARD
+            </Link>
+          )}
+
           <Link href="/profile" className="p-3 glass rounded-xl text-black/60 hover:text-black hover:border-accent transition-all relative">
             <User size={18} />
           </Link>
+
+          {session && (
+            <button 
+              onClick={handleLogout}
+              className="p-3 glass rounded-xl text-black/40 hover:text-red-500 hover:border-red-100 transition-all"
+              title="Sign Out"
+            >
+              <LogOut size={18} />
+            </button>
+          )}
           
           <button className="p-3 bg-black text-white rounded-xl hover:scale-105 transition-all relative shadow-xl">
              <ShoppingCart size={18} />
@@ -92,7 +127,7 @@ export default function Navbar() {
             <div className="flex justify-between items-center mb-16">
                <div className="flex items-center gap-2">
                  <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white"><Ghost size={16}/></div>
-                 <span className="font-black uppercase tracking-tighter">Antigravity</span>
+                 <span className="font-black uppercase tracking-tighter">BELLE AME</span>
                </div>
                <button onClick={() => setIsMenuOpen(false)} className="p-3 bg-black/5 rounded-xl"><X size={20}/></button>
             </div>

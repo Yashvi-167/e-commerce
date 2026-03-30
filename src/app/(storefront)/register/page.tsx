@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
-import { Ghost, Mail, ArrowRight, Sparkles, ShieldCheck, Lock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Star, ShieldCheck, Truck, Sparkles, Ghost, CreditCard, Mail, User, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
+export default function RegisterPage() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -17,32 +18,24 @@ export default function LoginPage() {
     setIsLoading(true);
     
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
       
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("Welcome back! Sign in successful.", {
+        toast.success("Account created successfully. Welcome!", {
           className: "glass border-accent text-black font-black uppercase text-[10px] tracking-widest",
           icon: <Sparkles className="text-accent" size={16} />
         });
-        
-        // Dynamic redirect based on role
-        if (data.user.role === "ADMIN") {
-          router.push("/admin/dashboard");
-        } else if (data.user.role === "RETAILER") {
-          router.push("/retailer/dashboard");
-        } else {
-          router.push("/");
-        }
+        router.push("/login");
       } else {
-        toast.error(data.error || "Login failed. Please check your credentials.");
+        toast.error(data.error || "Registration failed. Please try again.");
       }
     } catch (err) {
-      toast.error("An error occurred during sign in.");
+      toast.error("An error occurred during account creation.");
     } finally {
       setIsLoading(false);
     }
@@ -69,19 +62,36 @@ export default function LoginPage() {
                className="w-20 h-20 bg-black rounded-3xl flex items-center justify-center text-white mx-auto shadow-2xl relative group"
             >
               <div className="absolute inset-0 bg-accent/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all" />
-              <Lock size={32} className="relative z-10" />
+              <User size={32} className="relative z-10" />
             </motion.div>
             
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-2 text-accent font-black tracking-[0.4em] uppercase text-[10px]">
                 <Sparkles size={14} />
-                Secure Login
+                Join Belle Ame
               </div>
-              <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic text-black leading-none">Welcome Back</h1>
+              <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic text-black leading-none">Create Account</h1>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Input */}
+            <div className="space-y-2 text-left">
+              <label className="text-[10px] font-black uppercase tracking-widest text-black/20 ml-4 pb-1 block">Full Name</label>
+              <div className="relative group">
+                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-accent transition-colors" size={18} />
+                <input 
+                  required
+                  type="text" 
+                  placeholder="John Doe"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full glass border-black/5 px-14 py-5 rounded-2xl text-xs font-black tracking-widest text-black focus:outline-none focus:ring-2 focus:ring-accent/10 transition-all bg-white" 
+                />
+              </div>
+            </div>
+
+            {/* Email Input */}
             <div className="space-y-2 text-left">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/20 ml-4 pb-1 block">Email Address</label>
               <div className="relative group">
@@ -97,6 +107,7 @@ export default function LoginPage() {
               </div>
             </div>
 
+            {/* Password Input */}
             <div className="space-y-2 text-left">
               <label className="text-[10px] font-black uppercase tracking-widest text-black/20 ml-4 pb-1 block">Password</label>
               <div className="relative group">
@@ -110,6 +121,7 @@ export default function LoginPage() {
                   className="w-full glass border-black/5 px-14 py-5 rounded-2xl text-xs font-black tracking-widest text-black focus:outline-none focus:ring-2 focus:ring-accent/10 transition-all bg-white" 
                 />
               </div>
+              <p className="text-[9px] font-bold text-black/20 ml-4 uppercase tracking-tighter">Minimum 8 characters required</p>
             </div>
 
             <button 
@@ -120,19 +132,15 @@ export default function LoginPage() {
               {isLoading ? (
                  <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
               ) : (
-                <span className="relative z-10 flex items-center gap-3">SIGN IN <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /></span>
+                <span className="relative z-10 flex items-center gap-3">CREATE ACCOUNT <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" /></span>
               )}
             </button>
           </form>
 
-          <div className="pt-8 border-t border-black/5 flex flex-col items-center gap-6">
-             <Link href="/register" className="text-[10px] font-black uppercase tracking-[0.3em] text-black/40 hover:text-accent transition-colors">
-               Don't have an account? Create one
-             </Link>
-             <div className="flex items-center gap-3 text-black/20">
-               <ShieldCheck size={16} />
-               <p className="text-[10px] font-black uppercase tracking-[0.3em]">Secure SSL Encryption</p>
-             </div>
+          <div className="pt-8 border-t border-black/5 text-center">
+            <Link href="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-black/40 hover:text-accent transition-colors flex items-center justify-center gap-2">
+              Already have an account? Sign In
+            </Link>
           </div>
         </div>
 

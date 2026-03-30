@@ -41,7 +41,8 @@ model Product {
   category        String   @default("Uncategorized")
   sku             String?
   inventory       Int      @default(100)
-  vendor          String   @default("AURALIS")
+  vendor          String   @default("BELLE AME")
+  isFeatured      Boolean  @default(false)
   tags            String?
   features        Json?    @default("[]")
   variants        Json?    @default("[]")

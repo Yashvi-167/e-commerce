@@ -11,7 +11,7 @@ export const products = pgTable("products", {
   category: text("category").notNull().default("Uncategorized"),
   sku: text("sku"),
   inventory: integer("inventory").default(100),
-  vendor: text("vendor").default("AURALIS"),
+  vendor: text("vendor").default("BELLE AME"),
   tags: text("tags"),
   metaTitle: text("meta_title"),
   metaDescription: text("meta_description"),
@@ -20,13 +20,16 @@ export const products = pgTable("products", {
   variants: json("variants").default([]),
   reviewsRating: decimal("reviews_rating", { precision: 3, scale: 2 }).default("4.9"),
   reviewsCount: integer("reviews_count").default(128),
+  retailerId: integer("retailer_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
+  name: text("name"),
   email: text("email").notNull().unique(),
   password: text("password"),
+  role: text("role").notNull().default("BUYER"), // BUYER, RETAILER, ADMIN
   resetToken: text("reset_token"),
   resetTokenExpiry: timestamp("reset_token_expiry"),
   createdAt: timestamp("created_at").defaultNow().notNull(),

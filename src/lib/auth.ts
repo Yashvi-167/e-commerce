@@ -2,7 +2,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const secretKey = "antigravity-secret"; // In production, use process.env.JWT_SECRET
+const secretKey = "belle-ame-secret"; // In production, use process.env.JWT_SECRET
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: any) {
@@ -14,16 +14,29 @@ export async function encrypt(payload: any) {
 }
 
 export async function decrypt(input: string): Promise<any> {
-  const { payload } = await jwtVerify(input, key, {
-    algorithms: ["HS256"],
-  });
-  return payload;
+  try {
+    const { payload } = await jwtVerify(input, key, {
+      algorithms: ["HS256"],
+    });
+    return payload;
+  } catch (error) {
+    console.error("Session decryption failed:", error);
+    return null;
+  }
 }
 
 export async function getSession() {
   const session = (await cookies()).get("session")?.value;
   if (!session) return null;
-  return await decrypt(session);
+  
+  try {
+    const decoded = await decrypt(session);
+    if (!decoded) return null;
+    return decoded;
+  } catch (error) {
+    console.error("Get session error:", error);
+    return null;
+  }
 }
 
 export async function updateSession(request: NextRequest) {
