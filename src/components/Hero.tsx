@@ -1,134 +1,126 @@
 "use client";
-import { motion } from 'framer-motion';
-import { ArrowRight, ShoppingBag, Sparkles } from 'lucide-react';
-import Link from 'next/link';
+import { motion } from "framer-motion";
+import { ArrowRight, Sparkles, Ghost, ShoppingBag } from "lucide-react";
+import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden px-6 pt-20">
-      {/* Background Animated Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div 
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-            x: [0, 50, 0],
-            y: [0, 30, 0]
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-          className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/20 blur-[120px] rounded-full"
-        />
-        <motion.div 
-          animate={{ 
-            scale: [1.2, 1, 1.2],
-            opacity: [0.3, 0.5, 0.3],
-            x: [0, -50, 0],
-            y: [0, -30, 0]
-          }}
-          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-          className="absolute bottom-1/4 -right-20 w-96 h-96 bg-secondary/20 blur-[120px] rounded-full"
-        />
-      </div>
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-20 px-6">
+      {/* Dynamic Background Elements */}
+      <div className="absolute top-20 left-10 w-64 h-64 bg-secondary/30 blur-[100px] rounded-full animate-pulse" />
+      <div className="absolute bottom-20 right-10 w-80 h-80 bg-accent/20 blur-[120px] rounded-full animate-pulse" />
 
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-        {/* Text Content */}
-        <div className="flex flex-col items-start gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="glass px-4 py-2 rounded-full border-white/10 flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-white/60 uppercase"
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+        
+        {/* Left Content */}
+        <div className="space-y-10 text-center lg:text-left">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center justify-center lg:justify-start gap-3"
           >
-            <Sparkles size={14} className="text-primary" />
-            Welcome to the Future of Commerce
+            <div className="h-[2px] w-12 bg-accent rounded-full" />
+            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-accent">Antigravity // Pastel Protocol</span>
           </motion.div>
-          
+
           <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-white"
+            className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85] text-black italic"
           >
-            DEFEAT <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-secondary">GRAVITY.</span>
+            Defying <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-secondary">Gravity.</span>
           </motion.h1>
-          
+
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="max-w-md text-lg text-white/40 leading-relaxed font-medium"
+            className="text-xl md:text-2xl text-black/40 font-medium max-w-lg leading-relaxed lowercase tracking-tight"
           >
-            Experience a curated selection of premium goods delivered with zero friction. Our interface is designed to make shopping feel weightless.
+            Experience the weightless side of premium essentials. Curated objects in a pallet of sunset oranges and pastel pinks.
           </motion.p>
-          
+
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex flex-wrap gap-4"
+            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 pt-4"
           >
-            <Link href="/collections" className="glass px-8 py-4 rounded-2xl flex items-center gap-3 font-bold bg-primary text-white hover:neon-border hover:scale-105 transition-all duration-300">
-              EXPLORE NOW <ArrowRight size={20} />
-            </Link>
-            <Link href="/about" className="glass px-8 py-4 rounded-2xl flex items-center gap-3 font-bold text-white hover:bg-white/5 transition-all">
-              OUR MISSION
-            </Link>
-          </motion.div>
-        </div>
-
-        {/* Visual Content (Floating Cards) */}
-        <div className="relative h-[500px] lg:h-[600px] hidden lg:block">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4 }}
-            className="absolute inset-0 flex items-center justify-center"
-          >
-            {/* Main Floating Card */}
-            <motion.div
-              animate={{ y: [0, -20, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="w-[300px] h-[400px] glass-card p-6 flex flex-col justify-end gap-4 border-white/20 relative z-20"
+            <Link 
+              href="/collections" 
+              className="group bg-black text-white px-10 py-5 rounded-2xl font-black text-lg uppercase tracking-tighter flex items-center gap-3 transition-all hover:scale-105 active:scale-95 shadow-xl hover:shadow-accent/20"
             >
-              <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/30 blur-2xl rounded-full" />
-              <div className="h-48 w-full bg-gradient-to-br from-white/10 to-transparent rounded-xl" />
-              <div>
-                <h3 className="text-xl font-bold">Neo-Glow Sneakers</h3>
-                <p className="text-sm text-white/40">$249.00</p>
-              </div>
-              <button className="w-full py-3 glass rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-primary transition-all">
-                Quick Add
-              </button>
-            </motion.div>
-
-            {/* Smaller Floating Cards */}
-            <motion.div
-              animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute top-20 right-10 w-48 h-32 glass-card p-4 border-white/10 z-10"
-            >
-              <div className="flex gap-2">
-                <div className="w-8 h-8 rounded-full bg-secondary/40" />
-                <div className="flex-1 space-y-2">
-                  <div className="h-2 w-full bg-white/10 rounded" />
-                  <div className="h-2 w-2/3 bg-white/10 rounded" />
+              INITIALIZE DISCOVERY
+              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <div className="flex -space-x-4">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="w-12 h-12 rounded-full border-4 border-white bg-secondary/50 flex items-center justify-center overflow-hidden">
+                   <img src={`https://i.pravatar.cc/150?u=user${i}`} alt="" />
                 </div>
+              ))}
+              <div className="w-12 h-12 rounded-full border-4 border-white bg-black flex items-center justify-center text-white text-[10px] font-black">
+                +4k
               </div>
-            </motion.div>
-
-            <motion.div
-              animate={{ y: [0, -15, 0], x: [0, -10, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="absolute bottom-20 left-10 w-56 h-40 glass-card p-5 border-white/10 z-30"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <ShoppingBag className="text-primary" size={20} />
-                <span className="text-xs font-bold uppercase tracking-widest text-white/60">Trending</span>
-              </div>
-              <div className="h-16 w-full bg-gradient-to-r from-white/5 to-transparent rounded-lg" />
-            </motion.div>
+            </div>
           </motion.div>
         </div>
+
+        {/* Right Floating Cards */}
+        <div className="relative h-[500px] md:h-[600px] flex items-center justify-center">
+           {/* Main Float Card */}
+           <motion.div 
+             animate={{ y: [0, -20, 0], rotate: [0, 2, 0] }}
+             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+             className="glass-card w-[280px] md:w-[350px] aspect-[3/4] p-6 relative z-20 border-white shadow-2xl"
+           >
+             <div className="w-full h-full rounded-2xl bg-secondary overflow-hidden relative group">
+                <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80" className="w-full h-full object-cover grayscale-[0.2] transition-transform duration-700 group-hover:scale-110" alt="Product" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
+                   <div className="space-y-1">
+                      <p className="text-[10px] font-black text-white uppercase tracking-widest">New Arrival</p>
+                      <h3 className="text-xl font-black text-white uppercase tracking-tighter italic leading-none">Aura.X1</h3>
+                   </div>
+                   <div className="w-10 h-10 rounded-full glass flex items-center justify-center text-white">
+                      <ShoppingBag size={18} />
+                   </div>
+                </div>
+             </div>
+           </motion.div>
+
+           {/* Small Accent Card */}
+           <motion.div 
+             animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
+             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+             className="glass-card absolute top-10 right-0 md:-right-10 w-48 p-4 z-30 shadow-xl border-white"
+           >
+             <div className="space-y-4">
+               <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-accent animate-ping" />
+                  <span className="text-[8px] font-black uppercase tracking-widest text-black/60">Live // Registry</span>
+               </div>
+               <div className="h-1 bg-black/5 rounded-full overflow-hidden">
+                 <motion.div 
+                   animate={{ width: ["100%", "30%", "100%"] }}
+                   transition={{ duration: 4, repeat: Infinity }}
+                   className="h-full bg-accent" 
+                 />
+               </div>
+               <p className="text-[10px] font-bold text-black uppercase italic leading-tight">95.4% Sync Correctness</p>
+             </div>
+           </motion.div>
+
+           {/* Backdrop Card */}
+           <motion.div 
+             animate={{ scale: [1, 1.05, 1], rotate: [0, -3, 0] }}
+             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+             className="absolute -bottom-10 -left-10 w-64 h-64 bg-secondary/50 blur-[40px] rounded-[3rem] z-10"
+           />
+        </div>
+
       </div>
     </section>
   );

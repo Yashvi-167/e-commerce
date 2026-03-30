@@ -27,7 +27,8 @@ export default function CheckoutPage() {
       setIsSuccess(true);
       if (clearCart) clearCart();
       toast.success("Transaction localized and verified.", {
-        className: "glass neon-border text-white border-primary/50",
+        className: "glass border-accent text-black font-black uppercase text-[10px] tracking-widest",
+        icon: <Sparkles className="text-accent" size={16} />
       });
     }, 2500);
   }
@@ -38,18 +39,18 @@ export default function CheckoutPage() {
         <motion.div 
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="glass-card p-16 flex flex-col items-center gap-8 max-w-xl border-primary/20 shadow-[0_0_50px_rgba(139,92,246,0.2)]"
+          className="glass-card p-16 flex flex-col items-center gap-8 max-w-xl border-accent/20 shadow-2xl bg-white"
         >
-          <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center text-primary animate-pulse neon-border">
+          <div className="w-24 h-24 bg-accent/20 rounded-full flex items-center justify-center text-accent animate-pulse border-2 border-accent shadow-lg">
             <CheckCircle2 size={48} />
           </div>
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">Sync Complete</h1>
-            <p className="text-white/40 text-lg leading-relaxed">
+            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic text-black leading-none">Sync Complete</h1>
+            <p className="text-black/40 text-lg leading-relaxed lowercase font-medium">
               Your transmission has been verified. Assets are currently being routed to your coordinates.
             </p>
           </div>
-          <Link href="/collections" className="bg-primary text-white font-black uppercase text-lg px-12 py-5 rounded-2xl hover:neon-border transition-all shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+          <Link href="/collections" className="bg-black text-white font-black uppercase text-lg px-12 py-5 rounded-2xl hover:scale-105 transition-all shadow-xl">
             RETURN TO GRID
           </Link>
         </motion.div>
@@ -58,24 +59,27 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background pb-32 pt-10 px-6">
-      <div className="max-w-6xl mx-auto space-y-12">
+    <main className="min-h-screen bg-background pb-32 pt-10 px-6 relative overflow-hidden">
+      {/* Background gradients */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/20 blur-[120px] rounded-full" />
+      
+      <div className="max-w-6xl mx-auto space-y-12 relative z-10">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         >
-          <Link href="/collections" className="inline-flex items-center gap-3 text-white/20 hover:text-white font-bold uppercase tracking-[0.2em] text-xs transition-colors group">
-            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> BACK TO SECTOR
+          <Link href="/collections" className="inline-flex items-center gap-3 text-black/20 hover:text-black font-black uppercase tracking-[0.3em] text-[10px] transition-all group">
+            <ArrowLeft size={16} className="group-hover:-translate-x-2 transition-transform" /> BACK TO SECTOR
           </Link>
         </motion.div>
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-primary font-bold tracking-[0.3em] uppercase text-xs">
+            <div className="flex items-center gap-2 text-accent font-black tracking-[0.4em] uppercase text-[10px]">
               <Sparkles size={14} />
               Financial // protocol
             </div>
-            <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">Finalize.Manifest</h1>
+            <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none italic text-black">Finalize.Manifest</h1>
           </div>
         </div>
 
@@ -84,69 +88,63 @@ export default function CheckoutPage() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="lg:col-span-2 glass-card p-10 border-white/5 space-y-10"
+            className="lg:col-span-2 glass-card p-10 border-black/5 space-y-10 bg-white"
           >
-            <div className="flex items-center justify-between border-b border-white/5 pb-6">
-              <h2 className="text-xl font-black uppercase tracking-tighter">Registry Summary</h2>
-              <span className="glass px-4 py-1 rounded-full text-[10px] font-bold text-primary tracking-widest uppercase">{items.length} ITEMS DETECTED</span>
+            <div className="flex items-center justify-between border-b border-black/5 pb-6">
+              <h2 className="text-xl font-black uppercase tracking-tighter italic text-black">Registry Summary</h2>
+              <span className="glass px-4 py-1 rounded-full text-[10px] font-black text-accent tracking-widest uppercase border-accent/20">{items.length} ITEMS DETECTED</span>
             </div>
 
             {items.length === 0 ? (
-              <div className="py-20 text-center space-y-6">
-                <Ghost size={48} className="text-white/5 mx-auto" />
-                <p className="text-white/20 font-bold tracking-widest uppercase">No signals found in manifest.</p>
+              <div className="py-20 text-center space-y-6 opacity-20">
+                <Ghost size={48} className="text-black mx-auto" />
+                <p className="text-black font-black tracking-widest uppercase italic">No signals found in manifest.</p>
               </div>
             ) : (
               <div className="space-y-12">
                 <div className="space-y-6 max-h-[50vh] overflow-y-auto pr-4 scrollbar-hide">
                   {items.map(product => (
-                    <div key={product.id} className="flex gap-8 items-center glass p-6 rounded-3xl border-white/5 group hover:border-primary/20 transition-all">
-                      <div className="w-24 h-24 rounded-2xl glass border-white/5 overflow-hidden bg-black/40">
-                        <img src={product.image} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all" />
+                    <div key={product.id} className="flex gap-8 items-center bg-secondary/5 p-6 rounded-3xl border border-black/5 group hover:border-accent/20 transition-all">
+                      <div className="w-24 h-24 rounded-2xl glass border-white overflow-hidden bg-white shadow-sm">
+                        <img src={product.image} className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all" />
                       </div>
                       <div className="flex-1 space-y-2">
-                        <h4 className="font-bold text-white text-xl uppercase tracking-tight">{product.name}</h4>
-                        {product.variant && (
-                          <div className="flex">
-                            <span className="text-[10px] font-bold text-primary tracking-[0.2em] uppercase glass px-3 py-1 rounded-full border-primary/20">
-                              {product.variant}
-                            </span>
-                          </div>
-                        )}
-                        <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Quantity: {product.quantity}</p>
+                        <h4 className="font-black text-black text-xl uppercase tracking-tighter italic leading-none">{product.name}</h4>
+                        <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Quantity: {product.quantity}</p>
                       </div>
-                      <div className="text-2xl font-black text-white italic">
+                      <div className="text-2xl font-black text-black italic drop-shadow-sm">
                         ${(product.price * product.quantity).toFixed(2)}
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="space-y-6 border-t border-white/5 pt-8">
+                <div className="space-y-6 border-t border-black/5 pt-8">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                     <div className="glass p-6 rounded-2xl border-white/5 space-y-1">
-                        <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Subtotal</p>
-                        <p className="text-xl font-bold text-white/60">${cartTotal.toFixed(2)}</p>
+                     <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
+                        <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Subtotal</p>
+                        <p className="text-xl font-black text-black/60 italic">${cartTotal.toFixed(2)}</p>
                      </div>
-                     <div className="glass p-6 rounded-2xl border-white/5 space-y-1">
-                        <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Orbital Tax (18%)</p>
-                        <p className="text-xl font-bold text-white/60">${tax.toFixed(2)}</p>
+                     <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
+                        <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Orbital Tax (18%)</p>
+                        <p className="text-xl font-black text-black/60 italic">${tax.toFixed(2)}</p>
                      </div>
-                     <div className="glass p-6 rounded-2xl border-white/5 space-y-1">
-                        <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Secure Delivery</p>
-                        <p className={`text-xl font-bold ${shipping === 0 ? "text-primary" : "text-white/60"}`}>
+                     <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
+                        <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Secure Delivery</p>
+                        <p className={`text-xl font-black italic ${shipping === 0 ? "text-accent" : "text-black/60"}`}>
                           {shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}
                         </p>
                      </div>
                   </div>
 
-                  <div className="flex justify-between items-end bg-white/[0.02] p-8 rounded-[2rem] border border-white/5">
-                    <div className="space-y-1">
-                      <p className="text-[10px] font-bold text-primary uppercase tracking-[0.3em]">Total Credits Due</p>
-                      <p className="text-5xl font-black text-white italic drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]">${finalTotal.toFixed(2)}</p>
+                  <div className="flex justify-between items-end bg-black text-white p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 blur-[50px] rounded-full group-hover:bg-accent/40 transition-all" />
+                    <div className="space-y-1 relative z-10">
+                      <p className="text-[10px] font-black text-accent uppercase tracking-[0.3em]">Total Credits Due</p>
+                      <p className="text-5xl md:text-7xl font-black text-white italic tracking-tighter">${finalTotal.toFixed(2)}</p>
                     </div>
-                    <div className="hidden md:block">
-                       <ShieldCheck className="text-primary/40" size={32} />
+                    <div className="hidden md:block relative z-10">
+                       <ShieldCheck className="text-accent" size={48} />
                     </div>
                   </div>
                 </div>
@@ -159,14 +157,14 @@ export default function CheckoutPage() {
             <motion.div 
                initial={{ opacity: 0, x: 20 }}
                animate={{ opacity: 1, x: 0 }}
-               className="glass-card p-10 border-white/5 space-y-8 bg-primary/5 neon-border"
+               className="glass-card p-10 border-black/5 space-y-8 bg-white shadow-2xl"
             >
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <CreditCard className="text-primary" size={24} />
-                  <h3 className="font-black text-white uppercase tracking-tighter text-xl">Authorization</h3>
+                  <CreditCard className="text-accent" size={24} />
+                  <h3 className="font-black text-black uppercase tracking-tighter italic text-xl">Authorization</h3>
                 </div>
-                <p className="text-xs text-white/40 font-medium leading-relaxed tracking-wide">
+                <p className="text-xs text-black/40 font-medium leading-relaxed tracking-wide lowercase">
                   This transaction is protected by quantum-linked encryption. Initializing checkout will finalize your manifest and clear current cache.
                 </p>
               </div>
@@ -174,21 +172,21 @@ export default function CheckoutPage() {
               <button
                 onClick={handlePay}
                 disabled={isProcessing || items.length === 0}
-                className="w-full bg-primary text-white h-20 rounded-2xl font-black text-lg uppercase tracking-tighter flex items-center justify-center gap-4 neon-border hover:shadow-[0_0_30px_rgba(139,92,246,0.3)] transition-all disabled:opacity-50"
+                className="w-full bg-black text-white h-20 rounded-2xl font-black text-lg uppercase tracking-tighter flex items-center justify-center gap-4 hover:bg-accent transition-all shadow-xl disabled:opacity-50 group"
               >
                 {isProcessing ? (
                    <div className="flex items-center gap-3">
-                     <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                     <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                      VERIFYING...
                    </div>
                 ) : (
-                  <>AUTHORIZE TRANSACTION</>
+                  <>AUTHORIZE TRANSACTION <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" /></>
                 )}
               </button>
             </motion.div>
 
-            <div className="glass-card p-6 border-white/5 text-center">
-               <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em]">Sector 7 Security Protocol Active</p>
+            <div className="glass-card p-6 border-black/5 text-center bg-white/50 backdrop-blur-sm">
+               <p className="text-[10px] font-black text-black/20 uppercase tracking-[0.3em]">Sector 7 Security Protocol Active</p>
             </div>
           </div>
         </div>

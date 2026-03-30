@@ -1,133 +1,122 @@
-import { getSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import { User, Package, Heart, Settings, Ghost, Sparkles, ArrowRight } from "lucide-react";
-import Link from "next/link";
+"use client";
+import { useEffect, useState } from "react";
+import { User, Package, LogOut, ChevronRight, Ghost, Sparkles, ShieldCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
-export default async function ProfilePage() {
-  const session = await getSession();
-  if (!session) redirect("/login");
+export default function ProfilePage() {
+  const [session, setSession] = useState<any>(null);
+  const router = useRouter();
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.userId },
-    include: {
-      orders: {
-        include: { items: true },
-        orderBy: { createdAt: 'desc' }
-      },
-      wishlist: {
-        include: { product: true }
+  useEffect(() => {
+    const fetchSession = async () => {
+      const res = await fetch("/api/auth/session");
+      if (res.ok) {
+        setSession(await res.json());
+      } else {
+        router.push("/login");
       }
-    }
-  });
+    };
+    fetchSession();
+  }, [router]);
 
-  if (!user) redirect("/login");
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
+  };
+
+  if (!session) return (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
+        <Ghost className="text-accent/20" size={48} />
+      </motion.div>
+    </div>
+  );
 
   return (
-    <main className="min-h-screen bg-background text-foreground pb-20 pt-10 px-6">
-      <div className="max-w-7xl mx-auto space-y-12">
+    <main className="min-h-screen bg-background pb-32 pt-24 px-6 relative overflow-hidden">
+      {/* Background gradients */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/10 blur-[150px] rounded-full" />
+      
+      <div className="max-w-5xl mx-auto space-y-12 relative z-10">
         
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-black/5 pb-10">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-primary font-bold tracking-[0.3em] uppercase text-xs">
-              <User size={14} />
-              Identity // profile
+            <div className="flex items-center gap-2 text-accent font-black tracking-[0.4em] uppercase text-[10px]">
+              <Sparkles size={14} />
+              Identity // Registry
             </div>
-            <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-none">
-              Node.{user.email.split('@')[0]}
-            </h1>
+            <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none italic text-black">Profile.Sync</h1>
           </div>
-          <div className="flex gap-4">
-            <div className="glass px-6 py-3 rounded-xl border-white/5 flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-[10px] font-bold tracking-widest uppercase text-white/40">Status // Synchronized</span>
-            </div>
-          </div>
+          <button 
+            onClick={handleLogout}
+            className="glass px-8 py-4 rounded-2xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-black/40 hover:text-black hover:border-accent transition-all bg-white"
+          >
+            <LogOut size={16} /> TERMINATE SESSION
+          </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           
-          {/* Sidebar Info */}
-          <div className="space-y-8">
-            <div className="glass-card p-10 border-white/5 space-y-8">
-              <div className="w-24 h-24 rounded-[2rem] glass border-white/10 flex items-center justify-center text-primary shadow-[0_0_30px_rgba(139,92,246,0.2)]">
-                <Ghost size={40} />
+          {/* User Info Card */}
+          <motion.div 
+             initial={{ opacity: 0, x: -20 }}
+             animate={{ opacity: 1, x: 0 }}
+             className="lg:col-span-1 space-y-8"
+          >
+            <div className="glass-card p-10 border-black/5 bg-white shadow-2xl space-y-8 relative overflow-hidden text-center">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
+              <div className="w-32 h-32 bg-secondary/30 rounded-[3rem] mx-auto flex items-center justify-center text-black border-4 border-white shadow-xl relative group overflow-hidden">
+                 <img src={`https://i.pravatar.cc/150?u=${session.email}`} alt="" className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all" />
+                 <div className="absolute inset-0 bg-accent/20 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-[10px] font-bold tracking-[0.2em] text-white/20 uppercase">Registry Email</label>
-                  <p className="text-white font-bold">{user.email}</p>
-                </div>
-                <div>
-                  <label className="text-[10px] font-bold tracking-[0.2em] text-white/20 uppercase">Access Role</label>
-                  <p className="text-primary font-black uppercase tracking-widest text-xs italic">{user.role}</p>
-                </div>
+              <div className="space-y-1">
+                 <h2 className="text-2xl font-black uppercase tracking-tighter italic text-black leading-none">{session.email.split('@')[0]}</h2>
+                 <p className="text-xs font-black text-black/20 uppercase tracking-widest">{session.email}</p>
               </div>
-              <button className="w-full glass py-4 rounded-xl text-xs font-bold uppercase tracking-widest border-white/5 hover:neon-border transition-all">
-                UPDATE PROTOCOLS
-              </button>
-            </div>
-
-            <div className="glass-card p-8 border-white/5 bg-white/[0.02]">
-              <div className="flex items-center justify-between text-white/40">
-                <div className="flex items-center gap-3">
-                  <Heart size={18} />
-                  <span className="text-xs font-bold uppercase tracking-widest">Wishlist Vault</span>
-                </div>
-                <span className="text-xs font-black">{user.wishlist.length} Objects</span>
+              <div className="pt-6 grid grid-cols-2 gap-4">
+                 <div className="glass p-4 rounded-2xl border-black/5 bg-white shadow-sm">
+                    <p className="text-[8px] font-black text-black/20 uppercase tracking-widest leading-none">Status</p>
+                    <p className="text-xs font-black text-accent uppercase tracking-tighter mt-1 italic italic leading-none">{session.role}</p>
+                 </div>
+                 <div className="glass p-4 rounded-2xl border-black/5 bg-white shadow-sm">
+                    <p className="text-[8px] font-black text-black/20 uppercase tracking-widest leading-none">Sync Delta</p>
+                    <p className="text-xs font-black text-black uppercase tracking-tighter mt-1 italic leading-none">LOCKED</p>
+                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Main Content: Orders */}
-          <div className="lg:col-span-2 space-y-8">
-             <div className="flex items-center gap-4">
-                <Package className="text-primary" size={24} />
-                <h2 className="text-2xl font-black uppercase tracking-tighter">Order Transmissions</h2>
-                <div className="flex-1 h-px bg-white/5" />
-             </div>
+            <div className="glass p-8 rounded-3xl border-black/5 bg-black text-white space-y-4 shadow-xl">
+               <ShieldCheck className="text-accent" size={32} />
+               <p className="text-[10px] font-black uppercase tracking-[0.3em] leading-relaxed">Multi-factor orbital synchronization active.</p>
+            </div>
+          </motion.div>
 
-             {user.orders.length === 0 ? (
-                <div className="glass-card p-20 flex flex-col items-center justify-center text-center gap-6 border-white/5">
-                  <Sparkles size={48} className="text-white/10" />
-                  <p className="text-white/40 font-bold tracking-widest uppercase">No orbital deliveries scheduled.</p>
-                  <Link href="/collections" className="text-primary font-black uppercase tracking-tighter text-sm flex items-center gap-2 hover:gap-4 transition-all">
-                    INITIATE DISCOVERY <ArrowRight size={18} />
-                  </Link>
-                </div>
-             ) : (
-                <div className="space-y-6">
-                  {user.orders.map(order => (
-                    <div key={order.id} className="glass-card p-8 border-white/5 group hover:border-primary/20 transition-all space-y-6">
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-1">
-                          <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">Transmission ID</p>
-                          <p className="text-white font-black uppercase tracking-tight">#{String(order.id).substring(0, 8)}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">Status</p>
-                          <p className="text-primary font-black uppercase tracking-widest text-[10px]">{order.status}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-4">
-                        {order.items.map((item, i) => (
-                           <div key={i} className="w-12 h-12 rounded-lg glass border-white/5 overflow-hidden">
-                             <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80" alt="" className="w-full h-full object-cover opacity-60" />
-                           </div>
-                        ))}
-                        <div className="flex-1" />
-                        <div className="text-right">
-                           <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">Total</p>
-                           <p className="text-xl font-black text-white italic">${Number(order.totalAmount).toFixed(2)}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-             )}
-          </div>
+          {/* Orders / Activity List */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="lg:col-span-2 space-y-8"
+          >
+            <div className="glass-card border-black/5 bg-white shadow-2xl h-[600px] flex flex-col relative overflow-hidden">
+               <div className="px-10 py-8 border-b border-black/5 bg-secondary/5 flex justify-between items-center sticky top-0 bg-white/50 backdrop-blur-md z-10">
+                  <h2 className="text-2xl font-black uppercase tracking-tighter italic text-black leading-none">Order.History</h2>
+                  <span className="glass px-6 py-2 rounded-full text-[10px] font-black text-accent tracking-widest uppercase italic border-accent/20 bg-white">0 LOGS DETECTED</span>
+               </div>
+               
+               <div className="flex-1 overflow-y-auto px-10 py-20 flex flex-col items-center justify-center text-center space-y-8 opacity-20 scrollbar-hide">
+                  <Package size={80} className="text-black" />
+                  <div className="space-y-2">
+                    <p className="text-xl font-black uppercase tracking-widest italic text-black">Primary manifest empty.</p>
+                    <p className="text-xs font-bold lowercase tracking-normal text-black font-medium">No assets have been synchronized to this coordinate yet.</p>
+                  </div>
+                  <button onClick={() => router.push('/collections')} className="bg-black text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] shadow-xl hover:bg-accent transition-all opacity-100">
+                     INITIALIZE DISCOVERY
+                  </button>
+               </div>
+            </div>
+          </motion.div>
 
         </div>
       </div>
