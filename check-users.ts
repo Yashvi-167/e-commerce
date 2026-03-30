@@ -10,7 +10,7 @@ async function checkUsers() {
 
   const sql = neon(url);
   try {
-    const res = await sql`SELECT email FROM users`;
+    const res = await sql`SELECT * FROM users LIMIT 1`;
     console.log("USERS:", res);
     process.exit(0);
   } catch (error) {

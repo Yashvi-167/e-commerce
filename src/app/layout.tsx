@@ -20,11 +20,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
         
-        {/* Load Tailwind CDN properly via next/script to avoid hydration errors */}
-        <Script 
-          src="https://cdn.tailwindcss.com" 
-          strategy="beforeInteractive"
-        />
+
         
         <style dangerouslySetInnerHTML={{ __html: `
           :root {
@@ -68,22 +64,7 @@ export default function RootLayout({
             animation: float 6s ease-in-out infinite;
           }
         ` }} />
-        <Script id="tailwind-config" strategy="beforeInteractive">
-          {`
-            tailwind.config = {
-              theme: {
-                extend: {
-                  colors: {
-                    background: '#ffffff',
-                    secondary: '#fce4ec',
-                    accent: '#f48fb1',
-                    primary: '#f48fb1',
-                  }
-                }
-              }
-            }
-          `}
-        </Script>
+
       </head>
       <body className="min-h-full flex flex-col font-sans">
         {children}
