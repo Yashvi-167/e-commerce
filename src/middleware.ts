@@ -5,9 +5,9 @@ export async function middleware(request: NextRequest) {
   const session = await getSession();
   const { pathname } = request.nextUrl;
 
-  // Protect Admin routes
+  // Protect Admin/Management routes
   if (pathname.startsWith("/admin")) {
-    if (!session || session.role !== "ADMIN") {
+    if (!session || (session.role !== "ADMIN" && session.role !== "RETAILER")) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }

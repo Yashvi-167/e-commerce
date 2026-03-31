@@ -10,10 +10,10 @@ async function checkUsers() {
 
   const sql = neon(url);
   try {
-    const res = await sql`SELECT * FROM users LIMIT 1`;
-    console.log("USERS:", res);
+    const res = await sql`SELECT * FROM users WHERE email = 'yashvishingala167@gmail.com'`;
+    console.log("USER DATA:", JSON.stringify(res, null, 2));
     process.exit(0);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Database error:", error.message);
     process.exit(1);
   }

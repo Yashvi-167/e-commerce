@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +23,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
     }
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUserRecords = await db.select().from(users).where(eq(users.email, email)).limit(1);
+    const existingUser = existingUserRecords[0];
 
     if (existingUser) {
       return NextResponse.json({ error: "User already exists" }, { status: 400 });
@@ -29,14 +32,12 @@ export async function POST(request: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role: "BUYER"
-      }
-    });
+    const [user] = await db.insert(users).values({
+      name,
+      email,
+      password: hashedPassword,
+      role: "BUYER"
+    }).returning();
 
     return NextResponse.json({ 
       message: "User registered successfully", 

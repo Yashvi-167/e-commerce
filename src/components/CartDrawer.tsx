@@ -6,8 +6,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function CartDrawer() {
-  const { items, removeFromCart, updateQuantity, cartTotal, totalItems } = useCart();
-  const [isOpen, setIsOpen] = useState(false);
+  const { items, removeFromCart, updateQuantity, cartTotal, totalItems, isCartOpen: isOpen, setIsCartOpen: setIsOpen } = useCart();
 
   return (
     <>
@@ -74,13 +73,16 @@ export default function CartDrawer() {
                       </div>
                       <div className="flex-1 space-y-3">
                         <div className="flex justify-between items-start">
-                          <h4 className="font-black text-black uppercase tracking-tighter leading-none">{item.name}</h4>
+                          <div className="space-y-1">
+                            <h4 className="font-black text-black uppercase tracking-tighter leading-none">{item.name}</h4>
+                            {item.variant && <span className="text-[10px] font-black uppercase text-accent tracking-widest bg-accent/10 px-2 py-0.5 rounded-md border border-accent/20">SIZE: {item.variant}</span>}
+                          </div>
                           <button onClick={() => removeFromCart(item.id)} className="text-black/10 hover:text-pink-500 transition-colors">
                             <Trash2 size={16} />
                           </button>
                         </div>
                         <div className="flex items-center justify-between">
-                           <p className="text-lg font-black text-black italic">${item.price}</p>
+                           <p className="text-lg font-black text-black italic">₹{item.price}</p>
                            <div className="flex items-center glass rounded-xl border-black/5">
                              <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="p-2 text-black/40 hover:text-black">-</button>
                              <span className="px-3 font-black text-xs text-black">{item.quantity}</span>
@@ -98,7 +100,7 @@ export default function CartDrawer() {
                   <div className="flex justify-between items-end">
                     <div className="space-y-1">
                        <p className="text-[10px] font-black text-black/20 uppercase tracking-[0.3em]">Subtotal</p>
-                       <p className="text-4xl font-black text-black italic drop-shadow-sm">${cartTotal.toFixed(2)}</p>
+                       <p className="text-4xl font-black text-black italic drop-shadow-sm">₹{cartTotal.toFixed(2)}</p>
                     </div>
                     <div className="text-right">
                        <p className="text-[10px] font-black text-pink-500 uppercase tracking-widest">Secure Checkout Ready</p>

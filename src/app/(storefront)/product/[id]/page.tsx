@@ -5,9 +5,11 @@ import { notFound } from "next/navigation";
 import AddToCartButton from "@/components/AddToCartButton";
 import { ArrowLeft, Star, ShieldCheck, Truck, Sparkles, Ghost } from "lucide-react";
 import Link from "next/link";
+import { getSession } from "@/lib/auth";
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
-  const productId = parseInt(params.id);
+export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const productId = parseInt(id);
   if (isNaN(productId)) notFound();
 
   const [product] = await db.select().from(products).where(eq(products.id, productId));
@@ -15,6 +17,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
   if (!product) notFound();
 
   const variants = (product.variants as string[]) || ['S', 'M', 'L', 'XL'];
+  const session = await getSession();
 
   return (
     <main className="min-h-screen bg-background pb-32 pt-24 px-6 relative overflow-hidden">
@@ -59,7 +62,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
               </div>
               <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none italic text-black">{product.name}</h1>
               <div className="flex items-center gap-6">
-                 <span className="text-4xl font-black text-black italic drop-shadow-sm">${Number(product.price).toFixed(2)}</span>
+                 <span className="text-4xl font-black text-black italic drop-shadow-sm">₹{Number(product.price).toFixed(2)}</span>
                  <div className="h-8 w-px bg-black/10" />
                  <div className="flex items-center gap-1 text-accent">
                    {[1, 2, 3, 4, 5].map(i => <Star key={i} size={14} fill="currentColor" />)}
@@ -71,22 +74,22 @@ export default async function ProductPage({ params }: { params: { id: string } }
               {product.description || "Premium quality essentials designed for modern comfort and style."}
             </p>
 
-            <div className="space-y-6">
-              <div className="flex flex-col gap-3">
-                 <label className="text-[10px] font-black uppercase tracking-widest text-black/20 ml-2">Select // Size</label>
-                 <div className="flex flex-wrap gap-3">
-                    {variants.map(v => (
-                       <button key={v} className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${v === variants[0] ? 'bg-black text-white' : 'glass text-black/40 hover:text-black border-black/5'}`}>
-                          {v}
-                       </button>
-                    ))}
+            {(!session || session.role === "BUYER") ? (
+              <div className="space-y-6">
+                <div className="pt-2">
+                   <AddToCartButton product={product} variants={variants} />
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                 <div className="pt-2">
+                    <Link href="/admin/dashboard" className="w-full bg-accent text-primary py-6 rounded-2xl font-black text-lg uppercase tracking-tighter flex items-center justify-center gap-4 shadow-2xl hover:shadow-[0_0_30px_rgba(244,143,177,0.4)] transition-all">
+                       <ShieldCheck size={22} />
+                       MANAGE IN DASHBOARD
+                    </Link>
                  </div>
               </div>
-
-              <div className="pt-8">
-                 <AddToCartButton product={product} />
-              </div>
-            </div>
+            )}
 
             {/* USP Grid */}
             <div className="grid grid-cols-2 gap-6 pt-12 border-t border-black/5">

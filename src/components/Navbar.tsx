@@ -10,7 +10,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [session, setSession] = useState<any>(null);
-  const { totalItems } = useCart();
+  const { totalItems, setIsCartOpen } = useCart();
   const router = useRouter();
 
   useEffect(() => {
@@ -93,18 +93,24 @@ export default function Navbar() {
             </button>
           )}
           
-          <button className="p-3 bg-black text-white rounded-xl hover:scale-105 transition-all relative shadow-xl">
-             <ShoppingCart size={18} />
-             {totalItems > 0 && (
-               <motion.span 
-                 initial={{ scale: 0 }}
-                 animate={{ scale: 1 }}
-                 className="absolute -top-1 -right-1 w-5 h-5 bg-accent text-white rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white"
-               >
-                 {totalItems}
-               </motion.span>
-             )}
-          </button>
+          {/* Shopping Cart Trigger */}
+          {(!session || session.role === "BUYER") && (
+            <button 
+              onClick={() => setIsCartOpen(true)}
+              className="p-3 bg-black text-white rounded-xl hover:scale-105 transition-all relative shadow-xl"
+            >
+               <ShoppingCart size={18} />
+               {totalItems > 0 && (
+                 <motion.span 
+                   initial={{ scale: 0 }}
+                   animate={{ scale: 1 }}
+                   className="absolute -top-1 -right-1 w-5 h-5 bg-accent text-white rounded-full flex items-center justify-center text-[10px] font-black border-2 border-white"
+                 >
+                   {totalItems}
+                 </motion.span>
+               )}
+            </button>
+          )}
 
           <button 
             className="md:hidden p-3 glass rounded-xl text-black"

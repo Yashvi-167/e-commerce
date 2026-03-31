@@ -139,7 +139,7 @@ export default function CollectionContent({ initialProducts }: { initialProducts
                                     {product.name}
                                   </h3>
                                 </div>
-                                <span className="text-lg font-black text-black italic">${Number(product.price).toFixed(2)}</span>
+                                <span className="text-lg font-black text-black italic">₹{Number(product.price).toFixed(2)}</span>
                               </div>
                             </div>
                           </div>

@@ -21,6 +21,21 @@ export default function DashboardClient({
   const [form, setForm] = useState({ 
     name: "", price: "", description: "", imageUrl: "", department: "Men", category: "Shirts" 
   });
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const startEdit = (product: any) => {
+    setEditingId(product.id);
+    setForm({
+      name: product.name,
+      price: product.price.toString(),
+      description: product.description || "",
+      imageUrl: product.imageUrl || "",
+      department: product.department,
+      category: product.category
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleDelete = async (id: string) => {
     try {
@@ -39,24 +54,43 @@ export default function DashboardClient({
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsProcessing(true);
     const payload = { ...form, price: parseFloat(form.price) };
 
     try {
-      const res = await fetch(`/api/products`, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) {
-        const newProd = await res.json();
-        setProductList(prev => [newProd, ...prev]);
-        toast.success(`${payload.name} added to inventory.`, {
-          className: "glass border-accent text-black font-black uppercase text-[10px] tracking-widest",
-          icon: <Sparkles className="text-accent" size={16} />
+      if (editingId) {
+        const res = await fetch(`/api/products/${editingId}`, {
+          method: "PATCH",
+          body: JSON.stringify(payload)
         });
-        setForm({ name: "", price: "", description: "", imageUrl: "", department: "Men", category: "Shirts" });
+        if (res.ok) {
+          setProductList(prev => prev.map(p => p.id === editingId ? { ...p, ...payload } : p));
+          toast.success(`${payload.name} updated successfully.`, {
+            className: "glass border-accent text-black font-black uppercase text-[10px] tracking-widest",
+            icon: <Sparkles className="text-accent" size={16} />
+          });
+          setEditingId(null);
+          setForm({ name: "", price: "", description: "", imageUrl: "", department: "Men", category: "Shirts" });
+        }
+      } else {
+        const res = await fetch(`/api/products`, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const newProd = await res.json();
+          setProductList(prev => [newProd, ...prev]);
+          toast.success(`${payload.name} added to inventory.`, {
+            className: "glass border-accent text-black font-black uppercase text-[10px] tracking-widest",
+            icon: <Sparkles className="text-accent" size={16} />
+          });
+          setForm({ name: "", price: "", description: "", imageUrl: "", department: "Men", category: "Shirts" });
+        }
       }
     } catch {
-      toast.error("Failed to create product.");
+      toast.error(editingId ? "Failed to update product." : "Failed to create product.");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -120,7 +154,7 @@ export default function DashboardClient({
               <div className="space-y-1">
                 <p className="text-[10px] font-black text-black/40 uppercase tracking-[0.3em] italic leading-none">{stat.label}</p>
                 <p className="text-4xl font-black tracking-tighter text-black italic leading-none">
-                   {typeof stat.value === 'number' ? `$${stat.value.toLocaleString()}` : stat.value}
+                   {typeof stat.value === 'number' ? `₹${stat.value.toLocaleString()}` : stat.value}
                 </p>
               </div>
             </motion.div>
@@ -150,7 +184,7 @@ export default function DashboardClient({
                     <input required value={form.name} onChange={e=>setForm({...form, name: e.target.value})} className="w-full glass border-black/5 px-6 py-4 text-xs font-black tracking-widest text-black focus:outline-none focus:ring-2 focus:ring-accent/10 transition-all bg-secondary/5" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black tracking-[0.3em] text-black/20 uppercase ml-4 pb-1 block">Base Price ($)</label>
+                    <label className="text-[10px] font-black tracking-[0.3em] text-black/20 uppercase ml-4 pb-1 block">Base Price (₹)</label>
                     <input required type="number" step="0.01" value={form.price} onChange={e=>setForm({...form, price: e.target.value})} className="w-full glass border-black/5 px-6 py-4 text-xs font-black tracking-widest text-black focus:outline-none focus:ring-2 focus:ring-accent/10 transition-all bg-secondary/5" />
                   </div>
                   <div className="grid grid-cols-2 gap-6">
@@ -169,10 +203,23 @@ export default function DashboardClient({
                       </select>
                     </div>
                   </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black tracking-[0.3em] text-black/20 uppercase ml-4 pb-1 block">Image URL</label>
+                    <input required value={form.imageUrl} onChange={e=>setForm({...form, imageUrl: e.target.value})} className="w-full glass border-black/5 px-6 py-4 text-xs font-black tracking-widest text-black focus:outline-none focus:ring-2 focus:ring-accent/10 transition-all bg-secondary/5" placeholder="https://images.unsplash.com/..." />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black tracking-[0.3em] text-black/20 uppercase ml-4 pb-1 block">Description</label>
+                    <textarea value={form.description} onChange={e=>setForm({...form, description: e.target.value})} className="w-full glass border-black/5 px-6 py-4 text-xs font-black tracking-widest text-black focus:outline-none focus:ring-2 focus:ring-accent/10 transition-all bg-secondary/5 h-24 resize-none" placeholder="Enter product details..." />
+                  </div>
                 </div>
-                <button type="submit" className="w-full bg-black text-white font-black py-6 rounded-2xl hover:bg-accent transition-all uppercase tracking-[0.2em] text-[10px] shadow-xl">
-                  ADD TO INVENTORY
+                <button type="submit" disabled={isProcessing} className="w-full bg-black text-white font-black py-6 rounded-2xl hover:bg-accent transition-all uppercase tracking-[0.2em] text-[10px] shadow-xl disabled:opacity-50">
+                  {editingId ? "UPDATE PRODUCT" : "ADD TO INVENTORY"}
                 </button>
+                {editingId && (
+                  <button type="button" onClick={() => { setEditingId(null); setForm({ name: "", price: "", description: "", imageUrl: "", department: "Men", category: "Shirts" }); }} className="w-full mt-4 text-[10px] font-black text-black/20 uppercase tracking-widest hover:text-red-500 transition-colors">
+                    CANCEL EDIT
+                  </button>
+                )}
               </form>
             </div>
           </motion.div>
@@ -228,9 +275,16 @@ export default function DashboardClient({
                           </div>
                         </td>
                         <td className="px-10 py-8">
-                           <span className="text-black font-black italic text-lg drop-shadow-sm">${Number(product.price).toFixed(2)}</span>
+                           <span className="text-black font-black italic text-lg drop-shadow-sm">₹{Number(product.price).toFixed(2)}</span>
                         </td>
-                        <td className="px-10 py-8 text-right">
+                        <td className="px-10 py-8 text-right flex items-center justify-end gap-3">
+                          <button 
+                            onClick={() => startEdit(product)} 
+                            className="p-4 glass rounded-2xl text-black/10 hover:text-accent hover:border-accent/20 hover:bg-accent/5 transition-all bg-white shadow-sm"
+                            title="Edit Product"
+                          >
+                            <Plus size={18} className="rotate-45" />
+                          </button>
                           <button 
                             onClick={() => handleDelete(product.id)} 
                             className="p-4 glass rounded-2xl text-black/10 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition-all bg-white shadow-sm"

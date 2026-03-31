@@ -2,7 +2,7 @@
 import { useCart } from "@/components/CartProvider";
 import { ArrowLeft, CheckCircle2, ShieldCheck, CreditCard, Sparkles, Ghost, Package, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,6 +12,18 @@ export default function CheckoutPage() {
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [session, setSession] = useState<any>(null);
+  const [isLoadingSession, setIsLoadingSession] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/auth/session")
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        setSession(data?.user || null);
+        setIsLoadingSession(false);
+      })
+      .catch(() => setIsLoadingSession(false));
+  }, []);
 
   // Compute Bill Details
   const tax = cartTotal * 0.18;
@@ -20,6 +32,15 @@ export default function CheckoutPage() {
 
   const handlePay = () => {
     if (items.length === 0) return;
+
+    if (!session) {
+      toast.error("Account required to complete purchase.", {
+        className: "glass border-accent text-black font-black uppercase text-[10px] tracking-widest",
+        icon: <Ghost className="text-accent" size={16} />
+      });
+      router.push("/login?redirect=/checkout");
+      return;
+    }
 
     setIsProcessing(true);
     setTimeout(() => {
@@ -110,10 +131,13 @@ export default function CheckoutPage() {
                       </div>
                       <div className="flex-1 space-y-2">
                         <h4 className="font-black text-black text-xl uppercase tracking-tighter italic leading-none">{product.name}</h4>
-                        <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Quantity: {product.quantity}</p>
+                        <div className="flex items-center gap-3">
+                           <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Quantity: {product.quantity}</p>
+                           {product.variant && <span className="text-[10px] font-black uppercase text-accent tracking-widest bg-accent/10 px-2 py-0.5 rounded-md border border-accent/20">SIZE: {product.variant}</span>}
+                        </div>
                       </div>
                       <div className="text-2xl font-black text-black italic drop-shadow-sm">
-                        ${(product.price * product.quantity).toFixed(2)}
+                        ₹{(product.price * product.quantity).toFixed(2)}
                       </div>
                     </div>
                   ))}
@@ -123,16 +147,16 @@ export default function CheckoutPage() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
                       <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Subtotal</p>
-                      <p className="text-xl font-black text-black/60 italic">${cartTotal.toFixed(2)}</p>
+                      <p className="text-xl font-black text-black/60 italic">₹{cartTotal.toFixed(2)}</p>
                     </div>
                     <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
                       <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Sales Tax (18%)</p>
-                      <p className="text-xl font-black text-black/60 italic">${tax.toFixed(2)}</p>
+                      <p className="text-xl font-black text-black/60 italic">₹{tax.toFixed(2)}</p>
                     </div>
                     <div className="glass p-6 rounded-2xl border-black/5 space-y-1 bg-white/40">
                       <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Shipping</p>
                       <p className={`text-xl font-black italic ${shipping === 0 ? "text-accent" : "text-black/60"}`}>
-                        {shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}
+                        {shipping === 0 ? "FREE" : `₹${shipping.toFixed(2)}`}
                       </p>
                     </div>
                   </div>
@@ -141,7 +165,7 @@ export default function CheckoutPage() {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 blur-[50px] rounded-full group-hover:bg-accent/40 transition-all shadow-[0_0_20px_rgba(244,143,177,0.3)]" />
                     <div className="space-y-1 relative z-10">
                       <p className="text-[10px] font-black text-accent uppercase tracking-[0.3em]">Total Order Value</p>
-                      <p className="text-5xl md:text-7xl font-black text-white italic tracking-tighter">${finalTotal.toFixed(2)}</p>
+                      <p className="text-5xl md:text-7xl font-black text-white italic tracking-tighter">₹{finalTotal.toFixed(2)}</p>
                     </div>
                     <div className="hidden md:block relative z-10">
                       <ShieldCheck className="text-accent" size={48} />
@@ -171,16 +195,21 @@ export default function CheckoutPage() {
 
               <button
                 onClick={handlePay}
-                disabled={isProcessing || items.length === 0}
+                disabled={isProcessing || items.length === 0 || isLoadingSession}
                 className="w-full bg-black text-white h-20 rounded-2xl font-black text-lg uppercase tracking-tighter flex items-center justify-center gap-4 hover:shadow-[0_0_30px_rgba(244,143,177,0.4)] transition-all shadow-xl disabled:opacity-50 group"
               >
-                {isProcessing ? (
+                {isLoadingSession ? (
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    LOADING...
+                  </div>
+                ) : isProcessing ? (
                   <div className="flex items-center gap-3">
                     <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                     PROCESSING...
                   </div>
                 ) : (
-                  <>COMPLETE PURCHASE <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" /></>
+                  <>{session ? "COMPLETE PURCHASE" : "LOG IN TO PURCHASE"} <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" /></>
                 )}
               </button>
             </motion.div>

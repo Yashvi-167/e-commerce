@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { encrypt } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(request: Request) {
   try {
@@ -11,9 +13,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email }
-    });
+    const userRecords = await db.select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1);
+      
+    const user = userRecords[0];
 
     if (!user || !user.password) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
@@ -35,7 +40,13 @@ export async function POST(request: Request) {
       expiresAt 
     };
     
-    const session = await encrypt(sessionPayload);
+    let session;
+    try {
+      session = await encrypt(sessionPayload);
+    } catch (encryptError) {
+       console.error("Encryption error:", encryptError);
+       return NextResponse.json({ error: "Session creation failed" }, { status: 500 });
+    }
 
     const response = NextResponse.json({ 
       message: "Login successful",

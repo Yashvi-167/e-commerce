@@ -17,7 +17,7 @@ const seedProducts = [
   // --- MEN ---
   { 
     name: "Classic Indigo Selvedge Jeans", 
-    price: "145.00", compareAtPrice: "180.00",
+    price: "12035.00", compareAtPrice: "14940.00",
     description: "Premium raw indigo selvedge denim. These jeans are designed to age beautifully, creating unique fades tailored to your life.", 
     imageUrl: "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80", 
     department: "Men", category: "Jeans",
@@ -27,7 +27,7 @@ const seedProducts = [
   },
   { 
     name: "Oversized Heavyweight T-Shirt", 
-    price: "55.00",
+    price: "4565.00",
     description: "A thick, structured t-shirt that maintains its shape. Made from 300GSM organic cotton for a premium, heavy feel.", 
     imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80", 
     department: "Men", category: "T-Shirts",
@@ -37,7 +37,7 @@ const seedProducts = [
   },
   { 
     name: "Executive Oxford Shirt", 
-    price: "85.00", compareAtPrice: "110.00",
+    price: "7055.00", compareAtPrice: "9130.00",
     description: "The essential office shirt. Crisp, breathable, and wrinkle-resistant for the modern professional.", 
     imageUrl: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&q=80", 
     department: "Men", category: "Shirts",
@@ -47,7 +47,7 @@ const seedProducts = [
   },
   { 
     name: "Nomad Tech Bomber Jacket", 
-    price: "220.00",
+    price: "18260.00",
     description: "Weather-resistant shell with a minimalist silhouette. Perfect for urban exploration and changing climates.", 
     imageUrl: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80", 
     department: "Men", category: "Jackets",
@@ -57,7 +57,7 @@ const seedProducts = [
   },
   { 
     name: "Urban Explorer Sneakers", 
-    price: "165.00", compareAtPrice: "195.00",
+    price: "13695.00", compareAtPrice: "16185.00",
     description: "Lightweight sneakers designed for all-day comfort. Features a responsive sole and breathable knit upper.", 
     imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80", 
     department: "Men", category: "Footwear",
@@ -69,7 +69,7 @@ const seedProducts = [
   // --- WOMEN ---
   { 
     name: "High-Rise Distressed Jeans", 
-    price: "120.00",
+    price: "9960.00",
     description: "Elevated denim with subtle distressing for a lived-in look. Flattering high-rise cut with a touch of stretch.", 
     imageUrl: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80", 
     department: "Women", category: "Jeans",
@@ -79,7 +79,7 @@ const seedProducts = [
   },
   { 
     name: "Luxe Cashmere T-Shirt", 
-    price: "95.00", compareAtPrice: "125.00",
+    price: "7885.00", compareAtPrice: "10375.00",
     description: "Unbelievably soft cashmere blend. A t-shirt that brings luxury to your everyday rotation.", 
     imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80", 
     department: "Women", category: "T-Shirts",
@@ -89,7 +89,7 @@ const seedProducts = [
   },
   { 
     name: "Silk Flow Blouse", 
-    price: "110.00",
+    price: "9130.00",
     description: "Elegant silk blouse with a draped silhouette. Transitions perfectly from office to evening.", 
     imageUrl: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&q=80", 
     department: "Women", category: "Shirts",
@@ -99,7 +99,7 @@ const seedProducts = [
   },
   { 
     name: "Minimalist Trench Coat", 
-    price: "280.00", compareAtPrice: "350.00",
+    price: "23240.00", compareAtPrice: "29050.00",
     description: "A modern take on the classic trench. Water-resistant and incredibly sharp.", 
     imageUrl: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80", 
     department: "Women", category: "Jackets",
@@ -109,7 +109,7 @@ const seedProducts = [
   },
   { 
     name: "Midnight Velvet Heels", 
-    price: "185.00",
+    price: "15355.00",
     description: "Stunning velvet heels for special occasions. Features a comfortable block heel for all-night wear.", 
     imageUrl: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80", 
     department: "Women", category: "Footwear",
@@ -119,7 +119,7 @@ const seedProducts = [
   },
   { 
     name: "Satin Slip Midi Dress", 
-    price: "135.00",
+    price: "11205.00",
     description: "The ultimate 90s inspired slip dress. Shimmering satin that hugs the body beautifully.", 
     imageUrl: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&q=80", 
     department: "Women", category: "Dresses",
@@ -131,7 +131,7 @@ const seedProducts = [
   // --- KIDS ---
   { 
     name: "Comfy Stretch Kids Jeans", 
-    price: "45.00",
+    price: "3735.00",
     description: "Durable and stretchy jeans designed for active kids. Features an adjustable waistband.", 
     imageUrl: "https://images.unsplash.com/photo-1519457431-7571f0181e4b?auto=format&fit=crop&q=80", 
     department: "Kids", category: "Jeans",
@@ -141,7 +141,7 @@ const seedProducts = [
   },
   { 
     name: "Graphic Adventure T-Shirt", 
-    price: "25.00",
+    price: "2075.00",
     description: "Fun, high-quality graphic tee made from soft organic cotton.", 
     imageUrl: "https://images.unsplash.com/photo-1519235108751-14e2732a2e3b?auto=format&fit=crop&q=80", 
     department: "Kids", category: "T-Shirts",
@@ -151,7 +151,7 @@ const seedProducts = [
   },
   { 
     name: "Denim Button-Down Shirt", 
-    price: "38.00",
+    price: "3154.00",
     description: "A stylish denim shirt for the little ones. Durable enough for the playground.", 
     imageUrl: "https://images.unsplash.com/photo-1471286174890-9c112ffca5b4?auto=format&fit=crop&q=80", 
     department: "Kids", category: "Shirts",
@@ -161,7 +161,7 @@ const seedProducts = [
   },
   { 
     name: "Puffer Warmth Jacket", 
-    price: "75.00", compareAtPrice: "95.00",
+    price: "6225.00", compareAtPrice: "7885.00",
     description: "Insulated and water-resistant. Keeps them warm and dry in the coldest weather.", 
     imageUrl: "https://images.unsplash.com/photo-1515233261667-d8ad62106180?auto=format&fit=crop&q=80", 
     department: "Kids", category: "Jackets",
@@ -171,7 +171,7 @@ const seedProducts = [
   },
   { 
     name: "Daily Play Sneakers", 
-    price: "55.00",
+    price: "4565.00",
     description: "Easy-on sneakers with elastic laces. Designed for comfort and support during play.", 
     imageUrl: "https://images.unsplash.com/photo-1514989940723-e8e51635b782?auto=format&fit=crop&q=80", 
     department: "Kids", category: "Footwear",
@@ -183,7 +183,7 @@ const seedProducts = [
   // --- ACCESSORIES ---
   { 
     name: "Signature Leather Belt", 
-    price: "65.00",
+    price: "5395.00",
     description: "Italian leather belt with a minimalist silver buckle. A timeless accessory for any outfit.", 
     imageUrl: "https://images.unsplash.com/photo-1554444577-be9422559784?auto=format&fit=crop&q=80", 
     department: "Men", category: "Accessories",
@@ -193,7 +193,7 @@ const seedProducts = [
   },
   { 
     name: "Silk Neck Scarf", 
-    price: "45.00",
+    price: "3735.00",
     description: "Add a touch of elegance to your look with this hand-finished silk scarf.", 
     imageUrl: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&q=80", 
     department: "Women", category: "Accessories",

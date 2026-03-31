@@ -58,6 +58,38 @@ export default function ProfilePage() {
     }
   };
 
+  const handleBecomeRetailer = async () => {
+    setIsUpdating(true);
+    try {
+      const res = await fetch("/api/auth/update-profile", {
+        method: "PATCH",
+        body: JSON.stringify({ role: "RETAILER" }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSession(data.user);
+        toast.success("Account upgraded to Retailer successfully!", {
+          className: "glass border-pink-500 text-black font-black uppercase text-[10px] tracking-widest",
+          icon: <Sparkles className="text-pink-500" size={16} />
+        });
+        
+        // Ensure navbar and other components see the new role
+        router.refresh();
+        
+        // Redirect to the now-accessible dashboard
+        setTimeout(() => {
+          router.push("/retailer/dashboard");
+        }, 1500);
+      } else {
+        toast.error(data.error || "Upgrade failed");
+      }
+    } catch (err) {
+      toast.error("An error occurred");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   if (!session) return (
     <div className="min-h-screen bg-background flex items-center justify-center">
       <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
@@ -99,11 +131,7 @@ export default function ProfilePage() {
           >
             <div className="glass-card p-10 border-black/5 bg-white shadow-2xl space-y-8 relative overflow-hidden text-center">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-pink-400 to-transparent" />
-              <div className="w-32 h-32 bg-pink-100/30 rounded-[3rem] mx-auto flex items-center justify-center text-black border-4 border-white shadow-xl relative group overflow-hidden">
-                 <img src={`https://i.pravatar.cc/150?u=${session.email}`} alt="" className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all" />
-                 <div className="absolute inset-0 bg-pink-100/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-              <div className="space-y-2">
+              <div className="space-y-4 pt-4">
                  <div className="flex items-center justify-center gap-3 group/name">
                    {isEditingName ? (
                      <div className="flex items-center gap-2 bg-pink-50/50 p-2 rounded-xl border border-pink-100">
@@ -111,18 +139,18 @@ export default function ProfilePage() {
                           autoFocus
                           value={newName}
                           onChange={(e) => setNewName(e.target.value)}
-                          className="bg-transparent text-xl font-black uppercase tracking-tighter italic text-black focus:outline-none w-40"
+                          className="bg-transparent text-xl font-black tracking-tighter italic text-black focus:outline-none w-auto min-w-[160px]"
                         />
-                        <button disabled={isUpdating} onClick={handleUpdateName} className="p-2 bg-black text-white rounded-lg hover:bg-pink-500 transition-all disabled:opacity-50">
+                        <button disabled={isUpdating} onClick={handleUpdateName} className="p-2 bg-black text-white rounded-lg hover:bg-pink-500 transition-all disabled:opacity-50 inline-flex items-center justify-center">
                           {isUpdating ? <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : <Check size={14} />}
                         </button>
-                        <button onClick={() => { setIsEditingName(false); setNewName(session.name || ""); }} className="p-2 bg-white border border-black/5 rounded-lg hover:text-red-500 transition-all">
+                        <button onClick={() => { setIsEditingName(false); setNewName(session.name || ""); }} className="p-2 bg-white border border-black/5 rounded-lg hover:text-red-500 transition-all inline-flex items-center justify-center">
                           <X size={14} />
                         </button>
                      </div>
                    ) : (
                      <>
-                        <h2 className="text-2xl font-black uppercase tracking-tighter italic text-black leading-none">{session.name || session.email.split('@')[0]}</h2>
+                        <h2 className="text-3xl font-black tracking-tighter italic text-black leading-none">{session.name || session.email.split('@')[0]}</h2>
                         <button 
                           onClick={() => setIsEditingName(true)}
                           className="p-2 glass rounded-lg text-black/10 hover:text-pink-500 hover:border-pink-200 transition-all opacity-0 group-hover/name:opacity-100 shadow-sm bg-white"
@@ -135,9 +163,16 @@ export default function ProfilePage() {
                  <p className="text-xs font-black text-black/20 uppercase tracking-widest">{session.email}</p>
               </div>
               <div className="pt-6 grid grid-cols-2 gap-4">
-                 <div className="glass p-4 rounded-2xl border-black/5 bg-white shadow-sm">
-                    <p className="text-[8px] font-black text-black/20 uppercase tracking-widest leading-none">Role Status</p>
-                    <p className="text-xs font-black text-pink-500 uppercase tracking-tighter mt-1 italic leading-none">{session.role}</p>
+                 <div className="glass p-4 rounded-2xl border-black/5 bg-white shadow-sm flex flex-col justify-between">
+                    <div>
+                      <p className="text-[8px] font-black text-black/20 uppercase tracking-widest leading-none">Role Status</p>
+                      <p className="text-xs font-black text-pink-500 uppercase tracking-tighter mt-1 italic leading-none">{session.role}</p>
+                    </div>
+                    {session.role === "BUYER" && (
+                      <button disabled={isUpdating} onClick={handleBecomeRetailer} className="mt-4 text-[8px] font-black bg-pink-500 text-white uppercase tracking-widest px-3 py-1.5 rounded-lg hover:bg-black transition-all text-center w-full disabled:opacity-50">
+                        {isUpdating ? "UPGRADING..." : "BECOME RETAILER"}
+                      </button>
+                    )}
                  </div>
                  <div className="glass p-4 rounded-2xl border-black/5 bg-white shadow-sm">
                     <p className="text-[8px] font-black text-black/20 uppercase tracking-widest leading-none">Account Access</p>

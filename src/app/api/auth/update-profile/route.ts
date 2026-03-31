@@ -12,21 +12,26 @@ export async function PATCH(request: Request) {
        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { name } = await request.json();
-    if (!name) {
-       return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    const { name, role } = await request.json();
+    
+    if (!name && !role) {
+       return NextResponse.json({ error: "No fields provided to update" }, { status: 400 });
     }
+
+    const updates: any = {};
+    if (name) updates.name = name;
+    if (role) updates.role = role;
 
     // Update database
     await db.update(users)
-      .set({ name })
+      .set(updates)
       .where(eq(users.id, session.id));
 
-    // Create a new session payload with the updated name
+    // Create a new session payload with the updated values
     const expiresAt = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours
     const updatedSessionPayload = {
       ...session,
-      name,
+      ...updates,
       expiresAt
     };
 
