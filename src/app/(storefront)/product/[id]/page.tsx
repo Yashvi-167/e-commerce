@@ -74,22 +74,55 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               {product.description || "Premium quality essentials designed for modern comfort and style."}
             </p>
 
-            {(!session || session.role === "BUYER") ? (
-              <div className="space-y-6">
-                <div className="pt-2">
-                   <AddToCartButton product={product} variants={variants} />
+            {/* Product Meta Section */}
+            <div className="flex flex-wrap gap-x-8 gap-y-4 py-6 border-y border-black/5">
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Category</p>
+                <p className="text-[10px] font-black text-black uppercase tracking-[0.2em]">{String(product.category)}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">SKU</p>
+                <p className="text-[10px] font-black text-black uppercase tracking-[0.2em]">{String(product.sku || `BME-${productId.toString().padStart(4, '0')}`)}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Vendor</p>
+                <p className="text-[10px] font-black text-black uppercase tracking-[0.2em]">{product.vendor || "BELLE AME"}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-black/20 uppercase tracking-widest">Availability</p>
+                <p className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">{product.inventory! > 0 ? "In Stock" : "Limited Release"}</p>
+              </div>
+            </div>
+
+            {/* Features List */}
+            {product.features && Array.isArray(product.features) && (product.features as any[]).length > 0 && (
+              <div className="space-y-4">
+                <label className="text-[10px] font-black uppercase tracking-widest text-black/20 ml-2 italic">Product // Features</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {(product.features as any[]).map((feature: any, i: number) => (
+                    <div key={i} className="flex items-center gap-3 text-black/60 group">
+                      <div className="w-1.5 h-1.5 rounded-full bg-accent group-hover:scale-150 transition-transform" />
+                      <span className="text-[11px] font-bold uppercase tracking-wider">{String(feature)}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ) : (
-              <div className="space-y-6">
-                 <div className="pt-2">
-                    <Link href="/admin/dashboard" className="w-full bg-accent text-primary py-6 rounded-2xl font-black text-lg uppercase tracking-tighter flex items-center justify-center gap-4 shadow-2xl hover:shadow-[0_0_30px_rgba(244,143,177,0.4)] transition-all">
-                       <ShieldCheck size={22} />
-                       MANAGE IN DASHBOARD
-                    </Link>
-                 </div>
-              </div>
             )}
+
+            <div className="space-y-6">
+              <div className="pt-2">
+                 <AddToCartButton product={product} variants={variants} />
+              </div>
+
+              {session && (session.role === "ADMIN" || session.role === "RETAILER") && (
+                <div className="pt-4 mt-4 border-t border-black/5">
+                   <Link href={session.role === "ADMIN" ? "/admin/dashboard" : "/retailer/dashboard"} className="w-full glass border-black/10 text-black py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-4 hover:bg-black/5 transition-all">
+                      <ShieldCheck size={16} />
+                      MANAGE IN {String(session.role)} DASHBOARD
+                   </Link>
+                </div>
+              )}
+            </div>
 
             {/* USP Grid */}
             <div className="grid grid-cols-2 gap-6 pt-12 border-t border-black/5">

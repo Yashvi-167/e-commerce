@@ -2,8 +2,24 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 
 export async function middleware(request: NextRequest) {
-  const session = await getSession();
   const { pathname } = request.nextUrl;
+  
+  // Skip session check for internal Next.js requests and public static assets
+  if (
+    pathname.startsWith("/_next") || 
+    pathname.startsWith("/static") || 
+    pathname.startsWith("/favicon.ico") ||
+    pathname.startsWith("/api/auth") // Allow auth APIs to pass through middleware logic to avoid circular issues
+  ) {
+    return NextResponse.next();
+  }
+
+  let session = null;
+  try {
+    session = await getSession();
+  } catch (error) {
+    console.error("Middleware Session Error:", error);
+  }
 
   // Protect Admin/Management routes
   if (pathname.startsWith("/admin")) {
@@ -30,5 +46,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/retailer/:path*", "/login"],
+  matcher: ["/admin/:path*", "/retailer/:path*", "/login", "/api/auth/:path*"],
 };
