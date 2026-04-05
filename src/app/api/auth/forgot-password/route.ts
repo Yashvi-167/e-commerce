@@ -37,17 +37,20 @@ export async function POST(req: Request) {
 
     // 4. Send email securely via Resend API
     const { data, error: resendError } = await resend.emails.send({
-      from: "AURALIS <no-reply@auralis.com>", // UPDATE THIS to your verified domain email
+      from: "BELLE AME <no-reply@belle-ame.com>", // UPDATE THIS to your verified domain email
       to: email,
-      subject: "Reset Your AURALIS Password",
+      subject: "Access Recovery | BELLE AME",
       html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-          <h2 style="color: #0F172A; text-transform: uppercase; letter-spacing: -1px;">Password Reset Request</h2>
-          <p style="color: #64748B; font-size: 16px;">We received a request to securely reset the password for your AURALIS vault associated with this email address.</p>
-          <div style="margin: 30px 0;">
-            <a href="${resetLink}" style="background-color: #CCFF00; color: #0F172A; text-decoration: none; padding: 15px 30px; border-radius: 5px; font-weight: bold; text-transform: uppercase;">Reset Your Password</a>
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 40px; background-color: #ffffff; border: 1px solid #f0f0f0; border-radius: 24px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <div style="background-color: #000000; color: #ffffff; display: inline-block; padding: 15px 25px; border-radius: 12px; font-weight: 900; letter-spacing: 2px; font-style: italic;">BELLE AME</div>
           </div>
-          <p style="color: #64748B; font-size: 14px;">If you didn't request this, you can safely ignore this email. This link will self-destruct in 1 hour.</p>
+          <h2 style="color: #000000; text-transform: uppercase; letter-spacing: -1px; font-weight: 900; font-style: italic; font-size: 24px; text-align: center;">Account Recovery</h2>
+          <p style="color: #666666; font-size: 14px; line-height: 1.6; text-align: center; margin-bottom: 30px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">We received a request to securely decrypt access to your BELLE AME account.</p>
+          <div style="text-align: center; margin: 40px 0;">
+            <a href="${resetLink}" style="background-color: #000000; color: #f48fb1; text-decoration: none; padding: 20px 40px; border-radius: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">Reset Password</a>
+          </div>
+          <p style="color: #999999; font-size: 11px; text-align: center; margin-top: 40px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">If you didn't request this, please disregard. This secure link expires in 60 minutes.</p>
         </div>
       `,
     });

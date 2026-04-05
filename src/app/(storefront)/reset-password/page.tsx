@@ -3,8 +3,9 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { Lock, ArrowRight, CheckCircle2, Loader2, KeyRound } from "lucide-react";
+import { Lock, ArrowRight, CheckCircle2, Loader2, KeyRound, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -18,14 +19,16 @@ function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <div className="text-center space-y-6 max-w-md mx-auto p-12 bg-secondary rounded-[2.5rem] border border-slate-700/50 shadow-2xl relative">
-        <div className="w-20 h-20 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+      <div className="glass-card p-12 md:p-16 border-black/5 bg-white shadow-3xl text-center space-y-8 relative overflow-hidden">
+        <div className="w-20 h-20 bg-black/5 text-black/20 rounded-3xl flex items-center justify-center mx-auto mb-6">
           <KeyRound size={40} />
         </div>
-        <h2 className="text-3xl font-black uppercase text-foreground">Invalid Reset Link</h2>
-        <p className="text-slate-400 font-medium">This password reset link is missing its secure token. It may be broken or malformed.</p>
-        <Link href="/login" className="inline-block bg-accent text-primary px-8 py-4 mt-4 rounded-xl font-bold uppercase transition-transform hover:scale-105 shadow-xl">
-          Return to Login
+        <h2 className="text-3xl font-black uppercase text-black italic tracking-tighter">Broken Link</h2>
+        <p className="text-[10px] font-black uppercase tracking-widest text-black/40 leading-relaxed">
+          This secure access token is missing or compromised. Request a new one to continue.
+        </p>
+        <Link href="/forgot-password" size="lg" className="inline-block bg-black text-white px-10 py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-transform hover:scale-105 shadow-2xl active:scale-95">
+          REQUEST NEW LINK
         </Link>
       </div>
     );
@@ -35,12 +38,12 @@ function ResetPasswordForm() {
     e.preventDefault();
     
     if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error("Credentials mismatch. Encryption failed.");
       return;
     }
     
     if (newPassword.length < 8) {
-      toast.error("Password must be at least 8 characters long");
+      toast.error("Password must be at least 8 characters.");
       return;
     }
 
@@ -56,11 +59,14 @@ function ResetPasswordForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Failed to reset password");
+        throw new Error(data.error || "Reset operation failed");
       }
 
       setIsSuccess(true);
-      toast.success("Password secured! Your account is safe.");
+      toast.success("Security Update Complete", {
+        className: "glass border-accent text-black font-black uppercase text-[10px] tracking-widest",
+        icon: <Sparkles className="text-accent" size={16} />
+      });
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -70,65 +76,93 @@ function ResetPasswordForm() {
 
   if (isSuccess) {
     return (
-      <div className="text-center space-y-6 max-w-md mx-auto p-12 bg-secondary rounded-[2.5rem] border border-slate-700/50 shadow-2xl relative">
-         <div className="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center text-green-500 mx-auto mb-8 animate-bounce">
+      <div className="glass-card p-12 md:p-16 border-black/5 bg-white shadow-3xl text-center space-y-10 relative overflow-hidden">
+         <motion.div 
+           initial={{ scale: 0 }}
+           animate={{ scale: 1 }}
+           className="w-24 h-24 bg-black rounded-3xl flex items-center justify-center text-accent mx-auto mb-8 shadow-2xl"
+         >
            <CheckCircle2 size={48} />
+         </motion.div>
+         <div className="space-y-4">
+           <h1 className="text-4xl font-black text-black uppercase tracking-tighter italic">Vault Secured</h1>
+           <p className="text-[11px] font-black uppercase tracking-widest text-black/40 leading-relaxed">Your new credentials have been securely registered to the Belle Ame network.</p>
          </div>
-         <h1 className="text-4xl font-black text-foreground uppercase tracking-tighter">Password Reset Complete</h1>
-         <p className="text-slate-400 text-lg">Your new credentials have been securely registered to the network.</p>
-         <Link href="/login" className="inline-flex items-center gap-2 bg-accent text-primary font-black uppercase px-12 py-5 rounded-2xl hover:scale-105 transition-transform shadow-[0_0_30px_rgba(204,255,0,0.2)] mt-8">
-           Access Your Account <ArrowRight size={20} />
+         <Link href="/login" className="w-full bg-black text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl hover:bg-accent transition-all hover:scale-[1.02] active:scale-95">
+           ACCESS ACCOUNT <ArrowRight size={20} />
          </Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-md w-full mx-auto space-y-8 p-8 md:p-12 bg-secondary rounded-[2.5rem] border border-slate-700/50 shadow-2xl relative">
-      <div className="space-y-3 text-center">
-        <h2 className="text-4xl font-black uppercase text-foreground tracking-tighter">
-          Configure New Password
-        </h2>
-        <p className="text-slate-400 font-medium tracking-wide">
-          Securely encrypt a new password for your account below.
-        </p>
+    <div className="glass-card p-12 md:p-16 border-black/5 bg-white shadow-3xl text-center space-y-10 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
+      
+      <div className="space-y-6">
+        <motion.div 
+           animate={{ y: [0, -10, 0] }}
+           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+           className="w-20 h-20 bg-black rounded-3xl flex items-center justify-center text-white mx-auto shadow-2xl"
+        >
+          <Lock size={32} />
+        </motion.div>
+        
+        <div className="space-y-2">
+          <div className="flex items-center justify-center gap-2 text-accent font-black tracking-[0.4em] uppercase text-[10px]">
+            <Sparkles size={14} />
+            Security Protocol
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic text-black leading-none">New Access</h1>
+          <p className="text-[10px] font-black uppercase tracking-widest text-black/20 pt-2 italic leading-relaxed">
+            Encrypt a new password for your account.
+          </p>
+        </div>
       </div>
       
-      <form onSubmit={handleSubmit} className="space-y-6 pt-4">
+      <form onSubmit={handleSubmit} className="space-y-6 text-left">
         <div className="space-y-4">
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
-            <input 
-              type="password" 
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="New Password (8+ characters)" 
-              disabled={isLoading}
-              className="w-full bg-primary border border-slate-700/50 text-foreground px-12 py-4 rounded-xl focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium disabled:opacity-50" 
-            />
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-black/20 ml-4 pb-1 block">New Password</label>
+            <div className="relative group">
+              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-accent transition-colors" size={18} />
+              <input 
+                type="password" 
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="••••••••" 
+                disabled={isLoading}
+                className="w-full glass border-black/5 px-14 py-5 rounded-2xl text-xs font-black tracking-widest text-black focus:outline-none focus:ring-2 focus:ring-accent/10 transition-all bg-white" 
+              />
+            </div>
           </div>
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
-            <input 
-              type="password" 
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm New Password" 
-              disabled={isLoading}
-              className="w-full bg-primary border border-slate-700/50 text-foreground px-12 py-4 rounded-xl focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all font-medium disabled:opacity-50" 
-            />
+          
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-black/20 ml-4 pb-1 block">Confirm Password</label>
+            <div className="relative group">
+              <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-accent transition-colors" size={18} />
+              <input 
+                type="password" 
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="••••••••" 
+                disabled={isLoading}
+                className="w-full glass border-black/5 px-14 py-5 rounded-2xl text-xs font-black tracking-widest text-black focus:outline-none focus:ring-2 focus:ring-accent/10 transition-all bg-white" 
+              />
+            </div>
           </div>
         </div>
         
         <button 
           type="submit" 
           disabled={isLoading}
-          className="w-full bg-accent text-primary py-4 rounded-xl font-black text-lg flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(204,255,0,0.15)] disabled:opacity-70 disabled:hover:scale-100"
+          className="w-full bg-black text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl hover:bg-accent transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70 mt-4 relative overflow-hidden"
         >
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/0 via-white/5 to-accent/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
           {isLoading ? (
-            <><Loader2 size={24} className="animate-spin" /> Encrypting...</>
+            <Loader2 size={24} className="animate-spin text-accent" />
           ) : (
-            <>Reset Password <ArrowRight size={20} /></>
+            <span className="relative z-10 flex items-center gap-3">UPDATE PASSWORD <ArrowRight size={20} /></span>
           )}
         </button>
       </form>
@@ -138,13 +172,27 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <main className="min-h-screen bg-primary flex flex-col justify-center items-center py-24 px-6 relative">
-      <Link href="/" className="absolute top-8 left-8 text-2xl font-black text-foreground tracking-widest hover:text-accent transition-colors">
-        AURALIS<span className="text-accent">.</span>
-      </Link>
-      <Suspense fallback={<div className="text-accent flex flex-col items-center justify-center gap-4 animate-pulse pt-24"><Loader2 size={40} className="animate-spin" /><span className="text-slate-500 font-bold uppercase tracking-widest">Verifying Secure Token...</span></div>}>
-        <ResetPasswordForm />
-      </Suspense>
+    <main className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Background gradients */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/10 blur-[150px] rounded-full" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent/5 blur-[150px] rounded-full" />
+
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="max-w-md w-full relative z-10"
+      >
+        <Suspense fallback={
+          <div className="glass-card p-12 border-black/5 bg-white shadow-3xl text-center space-y-6">
+            <Loader2 size={40} className="animate-spin text-accent mx-auto" />
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-black/20">Verifying Secure Protocol...</p>
+          </div>
+        }>
+          <ResetPasswordForm />
+        </Suspense>
+        
+        <p className="mt-8 text-center text-[10px] font-black uppercase tracking-[0.4em] text-black/20">BELLE AME AUTHENTICATION CENTER</p>
+      </motion.div>
     </main>
   );
 }

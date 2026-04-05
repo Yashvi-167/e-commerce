@@ -97,18 +97,29 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="space-y-2 text-left">
-              <label className="text-[10px] font-black uppercase tracking-widest text-black/20 ml-4 pb-1 block">Password</label>
-              <div className="relative group">
-                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-accent transition-colors" size={18} />
-                <input 
-                  required
-                  type="password" 
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full glass border-black/5 px-14 py-5 rounded-2xl text-xs font-black tracking-widest text-black focus:outline-none focus:ring-2 focus:ring-accent/10 transition-all bg-white" 
-                />
+            <div className="space-y-4 text-left">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-black/20 ml-4 pb-1 block">Password</label>
+                <div className="relative group">
+                  <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-accent transition-colors" size={18} />
+                  <input 
+                    required
+                    type="password" 
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full glass border-black/5 px-14 py-5 rounded-2xl text-xs font-black tracking-widest text-black focus:outline-none focus:ring-2 focus:ring-accent/10 transition-all bg-white" 
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end px-2">
+                <Link 
+                  href="/forgot-password" 
+                  className="text-[9px] font-black uppercase tracking-[0.2em] text-black/30 hover:text-accent transition-colors group flex items-center gap-2"
+                >
+                  Forgot Password? <Sparkles size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
               </div>
             </div>
 
