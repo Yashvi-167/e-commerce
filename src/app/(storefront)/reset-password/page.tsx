@@ -27,7 +27,7 @@ function ResetPasswordForm() {
         <p className="text-[10px] font-black uppercase tracking-widest text-black/40 leading-relaxed">
           This secure access token is missing or compromised. Request a new one to continue.
         </p>
-        <Link href="/forgot-password" size="lg" className="inline-block bg-black text-white px-10 py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-transform hover:scale-105 shadow-2xl active:scale-95">
+        <Link href="/forgot-password" className="inline-block bg-black text-white px-10 py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-transform hover:scale-105 shadow-2xl active:scale-95">
           REQUEST NEW LINK
         </Link>
       </div>
