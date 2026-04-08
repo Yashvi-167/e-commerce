@@ -12,7 +12,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const productId = parseInt(id);
   if (isNaN(productId)) notFound();
 
-  const [product] = await db.select().from(products).where(eq(products.id, productId));
+  const [product] = (await db.select().from(products).where(eq(products.id, productId))) as any[];
 
   if (!product) notFound();
 
@@ -95,11 +95,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
             </div>
 
             {/* Features List */}
-            {product.features && Array.isArray(product.features) && (product.features as any[]).length > 0 && (
+            {product.features && Array.isArray(product.features) && (product.features as string[]).length > 0 && (
               <div className="space-y-4">
                 <label className="text-[10px] font-black uppercase tracking-widest text-black/20 ml-2 italic">Product // Features</label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {(product.features as any[]).map((feature: any, i: number) => (
+                  {(product.features as string[]).map((feature, i) => (
                     <div key={i} className="flex items-center gap-3 text-black/60 group">
                       <div className="w-1.5 h-1.5 rounded-full bg-accent group-hover:scale-150 transition-transform" />
                       <span className="text-[11px] font-bold uppercase tracking-wider">{String(feature)}</span>

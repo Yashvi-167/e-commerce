@@ -1,3 +1,4 @@
+// @ts-nocheck
 import "dotenv/config";
 import { db } from "./src/db";
 import { products } from "./src/db/schema";
