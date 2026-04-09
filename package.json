@@ -8,12 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "db:push": "drizzle-kit push",
-    "db:seed": "tsx src/db/seed.ts",
-    "postinstall": "prisma generate"
+    "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
-    "@prisma/client": "^7.6.0",
     "bcrypt": "^6.0.0",
     "clsx": "^2.1.1",
     "dotenv": "^17.3.1",
@@ -37,7 +35,6 @@
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
-    "prisma": "^7.6.0",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5"
